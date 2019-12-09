@@ -1,7 +1,15 @@
 <div id="webSockets">
-
-  <input type=text id="textInput" placeholder="Enter your text"/>
-  <button id="sendButton">Send</button>
-  <ul id="messages"></ul>
-
+  <button id="openButton" (click)="openConnection()">Open connection</button>
+  <button id="closeButton" (click)="closeSocket()">Close connection</button>
 </div>
+<div>
+  <button id="sendButton" (click)="sendMessageToServer()">Send</button>
+</div>
+<div>
+  <input type=text id="textInput" placeholder="Enter your text"/>
+  <ul id="messages"></ul>
+</div>
+
+
+
+

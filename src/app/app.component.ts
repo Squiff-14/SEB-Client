@@ -1,44 +1,50 @@
 import { WebSocketService } from './services/web-socket.service';
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Subscribable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-  title = 'SEB-Website';
+export class AppComponent implements OnDestroy {
 
-  constructor(private http : HttpClient, private wsService : WebSocketService){
-    debugger
+  messageFromServer: string;
+  wsSubscription: Subscription;
+  status;
 
-    console.log("Attempting to connect");
-    wsService.connect("ws://localhost:5000");
+  constructor(private http: HttpClient, private wsService: WebSocketService) {
+  }
 
-    
-    debugger
+  sendMessageToServer() {
+    this.status = this.wsService.sendMessage('Hello from client');
+    console.log(this.status);
+  }
+
+  openConnection() {
+
+    this.wsSubscription =  this.wsService.create('ws://localhost:5000')
+    .subscribe(
+      data => this.messageFromServer = data,
+      err => console.log(err),
+      () => console.log('The observeable is complete')
+    );
 
   }
 
+  closeSocket() {
+    this.wsSubscription.unsubscribe();
+    this.status = 'The socket is closed';
+  }
 
+  ngOnDestroy(): void {
+    this.closeSocket();
+  }
 
-
-
-
-  // Test of Login function with valid credentials
-  // Currently working returning JWT token to be stored in cookie
-  // For futuren authenticated API requests. 
-
-  //   this.login("Squiffler14", "Oakwell14");
-  // }
-
-  // public login(username: string, password: String){
-
-  //   const data = {'username': username, 'password': password};
-  //   const config = { headers: new HttpHeaders().set('Content-Type', 'application/json') };
-
-  //   var url : string = "https://localhost:5001/api/Authentication/login";
-  //     this.http.post(url, data, config).subscribe(res => console.log(res));
-  // }
 }
+
+
+
+
+

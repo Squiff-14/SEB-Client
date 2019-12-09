@@ -1,12 +1,16 @@
-import { TestBed } from '@angular/core/testing';
-
 import { WebSocketService } from './web-socket.service';
 
-describe('WebSocketService', () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
 
-  it('should be created', () => {
-    const service: WebSocketService = TestBed.get(WebSocketService);
-    expect(service).toBeTruthy();
+import { TestBed, async, inject } from '@angular/core/testing';
+
+describe('Service: WebSocketService', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [WebSocketService]
+    });
   });
+
+  it('should ...', inject([WebSocketService], (service: WebSocketService) => {
+    expect(service).toBeTruthy();
+  }));
 });
