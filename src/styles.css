@@ -1,1 +1,22 @@
-/* You can add global styles to this file, and also import other style files */
+
+.baige {
+  background-color: #EBE6E3;
+}
+
+.black {
+  background-color: #010101;
+}
+
+.white{
+  background-color: #F5F2F1;
+}
+
+.full-height {
+  height: 100vh;
+}
+
+* {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+

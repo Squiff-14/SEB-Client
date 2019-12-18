@@ -1,0 +1,19 @@
+.logo {
+    height: 25%;
+    width: 25%;
+}
+
+.navbar-nav .nav-item {
+    padding-left: 10%;
+    padding-right: 10%;
+}
+
+.navbar-nav .nav-link {
+    padding-right: 60px;
+    color: black;
+    font-weight: bolder;
+}
+
+.navbar-nav .nav-link :hover {
+    color: #F47E4A;
+}
