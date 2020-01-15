@@ -1,7 +1,8 @@
+import { AuthService } from './../services/auth.service';
 import { WebSocketService } from '../services/web-socket.service';
 import { Component, OnDestroy } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Subscribable, Subscription } from 'rxjs';
+import { Subscribable, Subscription, Observable } from 'rxjs';
 
 
 // Creating a WebSocket connection currently will overwrite any previous connections
@@ -15,11 +16,9 @@ import { Subscribable, Subscription } from 'rxjs';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent  {
-
-  constructor() {
+export class AppComponent {
+  constructor(private authService: AuthService) {
   }
-
 }
 
 
