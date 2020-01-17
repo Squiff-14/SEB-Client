@@ -24,9 +24,9 @@ import { NavComponent } from './shared/layout/nav/nav.component';
 
 
 const appRoutes: Routes = [
-  {path: 'Seb', component: HomeComponent},
+  {path: 'Chat', component: ChatRoomComponent},
   {path: 'login', component: LoginComponent },
-  {path: '', redirectTo: '/Seb', pathMatch: 'full'},
+  {path: '', redirectTo: '/Chat', pathMatch: 'full'},
   {path: 'WebSockets', component: ChatRoomComponent },
   
   {path: '**', component: PageNotFoundComponent}

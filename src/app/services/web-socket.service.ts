@@ -21,8 +21,6 @@ export class WebSocketService {
 
         // callback invoked on unsubscribe()
         return () => this.ws.close(1000, 'The user disconnected');
-
-
       }
     );
   }
