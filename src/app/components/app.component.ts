@@ -17,7 +17,11 @@ import { Subscribable, Subscription, Observable } from 'rxjs';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  constructor(private authService: AuthService) {
+
+  // Create WebSocketConnection
+  // Pass fake user (for now) in query params. 
+
+  constructor() {
   }
 }
 

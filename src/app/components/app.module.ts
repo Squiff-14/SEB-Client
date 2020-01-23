@@ -1,8 +1,7 @@
-import { ErrorInterceptor } from './../services/error.interceptor';
-import { RequestInterceptor } from './../services/request.interceptor';
 
+import { ChooseRoomComponent } from './pages/chat/choose-room/ChooseRoom.component';
+import { ChatRoomComponent } from './pages/chat/chat-room/ChatRoom.component';
 import { AuthService } from './../services/auth.service';
-import { ChatRoomComponent } from './ChatRoom/chat-room/ChatRoom.component';
 
 import { HeaderComponent } from './shared/layout/header/header.component';
 import { FooterComponent } from './shared/layout/footer/footer.component';
@@ -19,16 +18,16 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
-import { LoginComponent } from './pages/login/Login/Login.component';
+import { LoginComponent } from './pages/login/Login.component';
 import { NavComponent } from './shared/layout/nav/nav.component';
 
 
 const appRoutes: Routes = [
-  {path: 'Chat', component: ChatRoomComponent},
+  {path: 'chat/:id', component: ChatRoomComponent},
+  {path: 'room', component: ChooseRoomComponent},
   {path: 'login', component: LoginComponent },
-  {path: '', redirectTo: '/Chat', pathMatch: 'full'},
-  {path: 'WebSockets', component: ChatRoomComponent },
-  
+  {path: 'home', component: ChatRoomComponent },
+  {path: '', redirectTo: '/room', pathMatch: 'full'},
   {path: '**', component: PageNotFoundComponent}
 ];
 
@@ -36,6 +35,7 @@ const appRoutes: Routes = [
    declarations: [
       AppComponent,
       ChatRoomComponent,
+      ChooseRoomComponent,
       HomeComponent,
       HeaderComponent,
       FooterComponent,
@@ -53,9 +53,7 @@ const appRoutes: Routes = [
    ],
    providers: [
       WebSocketService,
-      AuthService,
-      { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true},
-      { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true}
+      AuthService
    ],
    bootstrap: [
       AppComponent
