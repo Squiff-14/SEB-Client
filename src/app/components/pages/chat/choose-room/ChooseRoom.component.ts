@@ -10,24 +10,26 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ChooseRoomComponent implements OnInit {
 
-  constructor(private wsService: WebSocketService, private router: Router ) { }
+  constructor(private wsService: WebSocketService, private router: Router) { }
 
-  private selectedRoom : string;
+  private selectedRoom: string;
   private rooms = [
-    {id: 1, label: "Room 1"},
-    {id: 1, label: "Room 2"},
-    {id: 3, label: "Room 3"}
+    { id: 1, label: "Room 1" },
+    { id: 1, label: "Room 2" },
+    { id: 3, label: "Room 3" }
   ]
 
 
   ngOnInit() {
   }
 
-  joinRoom(){
-    
-    // Move to Auth Guard, Will disconnect on page refresh, re-connect on re-load if authenticated.
-    this.wsService.create(`ws://localhost:5000?id=${1}`);
-    this.router.navigate(["/chat", this.selectedRoom]);
+  joinRoom() {
+    // Does the server need anything else when a user joins a room? 
+    this.wsService.send('on-join-room', {
+      roomId: this.selectedRoom,
+      timestamp: Date.now()
+    });
+    this.router.navigate(["/chat"]);
   }
 
 }

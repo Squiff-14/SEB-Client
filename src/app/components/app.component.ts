@@ -1,5 +1,5 @@
+import { WebSocketService } from './../services/web-socket.service';
 import { AuthService } from './../services/auth.service';
-import { WebSocketService } from '../services/web-socket.service';
 import { Component, OnDestroy } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Subscribable, Subscription, Observable } from 'rxjs';
@@ -21,7 +21,9 @@ export class AppComponent {
   // Create WebSocketConnection
   // Pass fake user (for now) in query params. 
 
-  constructor() {
+  constructor(private wsService: WebSocketService) {
+    //Move to Auth Guard, Will disconnect on page refresh, re-connect on re-load if authenticated.
+    this.wsService.create(`ws://localhost:5000?id=${1}`);
   }
 }
 

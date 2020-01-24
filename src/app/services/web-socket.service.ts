@@ -21,17 +21,17 @@ export class WebSocketService {
     this.ws = new WebSocket(url);
     // this.dataStream = new Observable(
     //   observer => {
-        this.ws.onopen = () => this.managePacket('open', null);
-        this.ws.onclose = () => { this.managePacket('close', null) };
-        this.ws.onmessage = (event: any) => {
-          var dataPacket = JSON.parse(event.data);
-          this.managePacket(dataPacket.event, dataPacket.data);     
-        };
-        this.ws.onerror = (event) => this.managePacket('error', event); // Not sure about this
+    this.ws.onopen = () => this.managePacket('open', null);
+    this.ws.onclose = () => { this.managePacket('close', null) };
+    this.ws.onmessage = (event: any) => {
+      var dataPacket = JSON.parse(event.data);
+      this.managePacket(dataPacket.event, dataPacket.data);
+    };
+    this.ws.onerror = (event) => this.managePacket('error', event); // Not sure about this
 
-        // callback invoked on unsubscribe()
-        // return () => this.ws.close(1000, 'The user disconnected');
-      // }
+    // callback invoked on unsubscribe()
+    // return () => this.ws.close(1000, 'The user disconnected');
+    // }
     // );
   }
 
@@ -50,7 +50,7 @@ export class WebSocketService {
 
   send(eventName: string, data: any): string {
     if (this.ws.readyState === this.socketIsOpen) {
-      var dataPacket = JSON.stringify({ event: eventName, data: data })
+      var dataPacket = { EventType: eventName, EventData: data }
       this.ws.send(JSON.stringify(dataPacket));
       return `Sent to server ${dataPacket}`;
     } else {
@@ -58,7 +58,7 @@ export class WebSocketService {
     }
   }
 
-  close(){
+  close() {
     this.ws.close(1000, 'The user disconnected')
   }
 

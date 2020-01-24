@@ -15,8 +15,6 @@ import { timestamp } from 'rxjs/operators';
 })
 export class ChatRoomComponent implements OnDestroy {
 
-    private sub: any;
-    private roomId: string;
     private messsageContent;
     private recievedMessage;
 
@@ -29,18 +27,10 @@ export class ChatRoomComponent implements OnDestroy {
         wsService.bind("on-message", (data: DataPacket) => { this.recievedMessage = data.eventData.content});
     }
 
-    ngOnInit() {
-
-        this.sub = this.route.params.subscribe(params => {
-            this.roomId = params['id'];
-        });
-    }
 
     sendMessage() {
-        console.log(this.wsService.send('on-message', {
-            roomId: this.roomId,
+        console.log(this.wsService.send('on-message', {       
             content: this.messsageContent,
-            timestamp: Date.now()
         }));
     }
 
