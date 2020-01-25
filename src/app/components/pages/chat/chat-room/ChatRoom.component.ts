@@ -1,12 +1,8 @@
-import { ActivatedRoute } from '@angular/router';
+import { RoomMessage } from './../../../../models/data-packets/room-message';
 import { WebSocketService } from '../../../../services/web-socket.service';
-import { HttpClient } from '@angular/common/http';
+import { Guid } from 'guid-typescript';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { DataPacket } from 'src/app/models/DataPacket/DataPacket';
-import { User } from 'src/app/models/User';
-import { timestamp } from 'rxjs/operators';
-
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-chat-room',
@@ -15,23 +11,29 @@ import { timestamp } from 'rxjs/operators';
 })
 export class ChatRoomComponent implements OnDestroy {
 
-    private messsageContent;
-    private recievedMessage;
+    private roomId: string;
+    private messsageContent: string;
+    private recievedMessage = "";
 
-    status;
-
-    constructor(private http: HttpClient,
-        private wsService: WebSocketService,
-        private route: ActivatedRoute) {
-        wsService.bind("on-message", (data: DataPacket) => { console.log(JSON.stringify(data)) });
-        wsService.bind("on-message", (data: DataPacket) => { this.recievedMessage = data.eventData.content});
+    constructor(private wsService: WebSocketService, private route: ActivatedRoute) {
+        this.route.paramMap.subscribe(params => {
+            this.roomId = params.get("id");
+        });
+        wsService.bind("on-message", (data: any) => { JSON.stringify(data) });
+        wsService.bind("on-message", (data: any) => { this.recievedMessage = data.content });
     }
 
-
     sendMessage() {
-        console.log(this.wsService.send('on-message', {       
-            content: this.messsageContent,
-        }));
+        var dataPacket: RoomMessage = {
+            eventType: "on-message",
+            eventData: {
+                roomId: this.roomId,
+                timestamp: new Date(),
+                messageId: Guid.create().toString(),
+                content: this.messsageContent
+            }
+        }
+        console.log(this.wsService.send(dataPacket));
     }
 
     closeSocket() {
@@ -41,5 +43,9 @@ export class ChatRoomComponent implements OnDestroy {
     ngOnDestroy(): void {
         this.closeSocket();
     }
+
+    onKey(event: any) { // without type info
+        this.messsageContent = event.target.value;
+      }
 
 }

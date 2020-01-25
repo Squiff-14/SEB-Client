@@ -23,7 +23,7 @@ import { NavComponent } from './shared/layout/nav/nav.component';
 
 
 const appRoutes: Routes = [
-  {path: 'chat', component: ChatRoomComponent},
+  {path: 'chat/:id', component: ChatRoomComponent},
   {path: 'room', component: ChooseRoomComponent},
   {path: 'login', component: LoginComponent },
   {path: 'home', component: ChatRoomComponent },

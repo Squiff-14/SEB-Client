@@ -1,6 +1,6 @@
 
 <div *ngIf="!isLoggedIn"  class="container">
-  <form [formGroup]="form" (ngSubmit)=login()>
+  <form [formGroup]="form" (ngSubmit)=onSubmit()>
     <fieldset>
       <legend>Login</legend>
       <div class="form-field">

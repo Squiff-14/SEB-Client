@@ -23,7 +23,8 @@ export class AppComponent {
 
   constructor(private wsService: WebSocketService) {
     //Move to Auth Guard, Will disconnect on page refresh, re-connect on re-load if authenticated.
-    this.wsService.create(`ws://localhost:5000?id=${1}`);
+    this.wsService.create(`ws://localhost:5000?id=${Math.ceil(Math.random() * 10)}`);
+    
   }
 }
 

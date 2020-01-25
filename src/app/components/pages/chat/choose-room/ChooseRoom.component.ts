@@ -1,4 +1,5 @@
-import { DataPacket } from 'src/app/models/DataPacket/DataPacket';
+import { DataPacket } from '../../../../models/data-packets/data-packet'
+import { timestamp } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { WebSocketService } from '../../../../services/web-socket.service';
 import { Component, OnInit } from '@angular/core';
@@ -8,28 +9,26 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './ChooseRoom.component.html',
   styleUrls: ['./ChooseRoom.component.css']
 })
-export class ChooseRoomComponent implements OnInit {
+export class ChooseRoomComponent {
 
   constructor(private wsService: WebSocketService, private router: Router) { }
 
   private selectedRoom: string;
   private rooms = [
     { id: 1, label: "Room 1" },
-    { id: 1, label: "Room 2" },
+    { id: 2, label: "Room 2" },
     { id: 3, label: "Room 3" }
   ]
 
-
-  ngOnInit() {
-  }
-
   joinRoom() {
-    // Does the server need anything else when a user joins a room? 
-    this.wsService.send('on-join-room', {
-      roomId: this.selectedRoom,
-      timestamp: Date.now()
-    });
-    this.router.navigate(["/chat"]);
+    var packetData: DataPacket = {
+      eventType: "on-room",
+      eventData: {
+        roomId: this.selectedRoom,
+        timestamp: new Date() 
+      }
+    }
+    console.log(this.wsService.send(packetData));
+    this.router.navigate(["/chat", this.selectedRoom]);
   }
-
 }

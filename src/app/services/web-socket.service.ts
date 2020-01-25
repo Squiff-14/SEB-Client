@@ -1,4 +1,4 @@
-import { DataPacket } from '../models/DataPacket/DataPacket';
+import { DataPacket } from '../models/data-packets/data-packet'
 import { map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Observable, observable } from 'rxjs';
@@ -10,8 +10,7 @@ export class WebSocketService {
 
   ws: WebSocket;
   socketIsOpen = 1;
-  dataStream: Observable<any>;
-  callBacks: Object; //Object of EventName : Callback fn
+  callBacks: Object;
 
   constructor() {
     this.callBacks = {};
@@ -19,43 +18,34 @@ export class WebSocketService {
 
   create(url: string) {
     this.ws = new WebSocket(url);
-    // this.dataStream = new Observable(
-    //   observer => {
-    this.ws.onopen = () => this.managePacket('open', null);
-    this.ws.onclose = () => { this.managePacket('close', null) };
+    this.ws.onopen = () => console.log("Client Connected");
+    this.ws.onclose = () => console.log("Client Disconencted");
     this.ws.onmessage = (event: any) => {
-      var dataPacket = JSON.parse(event.data);
-      this.managePacket(dataPacket.event, dataPacket.data);
+      var dataPacket: DataPacket = JSON.parse(event.data);
+      this.managePacket(dataPacket.eventType, dataPacket.eventData);
     };
-    this.ws.onerror = (event) => this.managePacket('error', event); // Not sure about this
-
-    // callback invoked on unsubscribe()
-    // return () => this.ws.close(1000, 'The user disconnected');
-    // }
-    // );
+    this.ws.onerror = (event) => this.managePacket('error', event);
   }
 
   //chainable callback functions bound to an event name;
-  bind(eventName: string, fn: (data: object) => any) {
-    this.callBacks[eventName] = this.callBacks[eventName] || [];
-    this.callBacks[eventName].push(fn);
+  bind(eventType: string, fn: (data: object) => any) {
+    this.callBacks[eventType] = this.callBacks[eventType] || [];
+    this.callBacks[eventType].push(fn);
     return this;
   }
 
-  managePacket(eventName: string, eventData) {
-    var chain = this.callBacks[eventName];
-    if (!chain) { return; }
+  managePacket(eventType: string, eventData: object) {
+    var chain = this.callBacks[eventType];
+    if (!chain) return;
     chain.map((callback) => callback(eventData));
   }
 
-  send(eventName: string, data: any): string {
+  send(dataPacket: DataPacket): string {
     if (this.ws.readyState === this.socketIsOpen) {
-      var dataPacket = { EventType: eventName, EventData: data }
       this.ws.send(JSON.stringify(dataPacket));
-      return `Sent to server ${dataPacket}`;
-    } else {
-      return 'WebSocket connection is not open';
+      return `Sent to server ${JSON.stringify(dataPacket)}`;
     }
+    else return 'WebSocket connection is not open';
   }
 
   close() {
