@@ -19,14 +19,18 @@ import { first } from 'rxjs/operators';
 })
 export class LoginComponent {
 
-  //loading: boolean = false;
-  //submitted: boolean = false;
   form: FormGroup;
   returnUrl: string;
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router,
+  private isLoggedIn: boolean;
+
+  constructor(private fb: FormBuilder, 
+              private authService: AuthService, 
+              private router: Router,
               private route: ActivatedRoute) {
-    if (this.authService.currentUserValue) {
+
+    this.authService.isLoggedIn().subscribe( result => this.isLoggedIn = result);
+    if (this.isLoggedIn) {
       this.router.navigate['/']
     }
   }

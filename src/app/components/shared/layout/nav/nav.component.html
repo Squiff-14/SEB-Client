@@ -1,23 +1,17 @@
 
 
 <nav class="navbar navbar-expand-lg white">
-    <a class="navbar-brand"><img class="logo" src="assets/img/SEB-Logo.png"><img></a>
-    <ul class="navbar-nav ">
+    <a><img class="logo" src="assets/img/SEB-Logo.png"><img></a>
+    <ul *ngIf="isLoggedIn"  class="navbar-nav ">
         <li>
-            <a class="nav-link" href=Seb>Home</a>
+            <a class="nav-link" href=room>Room</a>
         </li>
 
         <li>
             <a class="nav-link" href="Profile">Profile</a>
         </li>
         <li>
-            <a class="nav-link" href="WebSockets">WebSockets</a>
+            <a href="login" (click)="authService.logout()" class="nav-link">Logout</a>
         </li>
-        <li>
-            <a class="nav-link">Events</a>
-        </li>
-        <!-- <li>
-            <a *ngIf="isLoggedIn" (click)="authService.Logout()" class="nav-link">Logout</a>
-        </li> -->
     </ul>
 </nav>

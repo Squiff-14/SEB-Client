@@ -3,13 +3,14 @@ import { WebSocketService } from '../../../../services/web-socket.service';
 import { Guid } from 'guid-typescript';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { DataPacket } from 'src/app/models/data-packets/data-packet';
 
 @Component({
     selector: 'app-chat-room',
     templateUrl: './ChatRoom.component.html',
     styleUrls: ['./ChatRoom.component.css']
 })
-export class ChatRoomComponent implements OnDestroy {
+export class ChatRoomComponent implements OnDestroy, OnInit {
 
     private roomId: string;
     private messsageContent: string;
@@ -21,6 +22,17 @@ export class ChatRoomComponent implements OnDestroy {
         });
         wsService.bind("on-message", (data: any) => { JSON.stringify(data) });
         wsService.bind("on-message", (data: any) => { this.recievedMessage = data.content });
+    }
+
+    ngOnInit(): void {
+        var packetData: DataPacket = {
+            eventType: "on-room",
+            eventData: {
+                roomId: this.roomId,
+                timestamp: new Date()
+            }
+        }
+        console.log(this.wsService.send(packetData));
     }
 
     sendMessage() {
@@ -40,12 +52,12 @@ export class ChatRoomComponent implements OnDestroy {
         this.wsService.close();
     }
 
+    onKey(event: any) { // without type info
+        this.messsageContent = event.target.value;
+    }
+
     ngOnDestroy(): void {
         this.closeSocket();
     }
-
-    onKey(event: any) { // without type info
-        this.messsageContent = event.target.value;
-      }
 
 }

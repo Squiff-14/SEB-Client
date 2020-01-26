@@ -1,18 +1,18 @@
 
-<div *ngIf="!isLoggedIn"  class="container">
+<div class="container">
   <form [formGroup]="form" (ngSubmit)=onSubmit()>
     <fieldset>
       <legend>Login</legend>
-      <div class="form-field">
+      <div>
         <label>Username</label>
         <input type="text" formControlName="username" name="username">
-        <div class="error" *ngIf="form.controls['username'].hasError('required') 
+        <div *ngIf="form.controls['username'].hasError('required') 
         && form.controls['username'].touched"> Please enter username</div>
       </div>
-      <div class="form-field">
+      <div>
         <label>Password</label>
         <input type="password" formControlName="password" name="password">
-        <div class="error" *ngIf="form.controls['password'].hasError('required') 
+        <div *ngIf="form.controls['password'].hasError('required') 
         && form.controls['password'].touched"> Please enter password</div>
       </div>
     </fieldset>

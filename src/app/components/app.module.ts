@@ -1,3 +1,5 @@
+import { AuthGuardService } from './../services/auth-guard.service';
+import { ErrorInterceptor } from './../services/error.interceptor';
 
 import { ChooseRoomComponent } from './pages/chat/choose-room/ChooseRoom.component';
 import { ChatRoomComponent } from './pages/chat/chat-room/ChatRoom.component';
@@ -20,16 +22,22 @@ import { AppComponent } from './app.component';
 import { HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import { LoginComponent } from './pages/login/Login.component';
 import { NavComponent } from './shared/layout/nav/nav.component';
+import { RequestInterceptor } from '../services/request.interceptor';
+import { JwtModule } from "@auth0/angular-jwt";
 
 
 const appRoutes: Routes = [
-  {path: 'chat/:id', component: ChatRoomComponent},
-  {path: 'room', component: ChooseRoomComponent},
+  {path: 'chat/:id', component: ChatRoomComponent, canActivate: [AuthGuardService]},
+  {path: 'room', component: ChooseRoomComponent, canActivate: [AuthGuardService] }, 
   {path: 'login', component: LoginComponent },
-  {path: 'home', component: ChatRoomComponent },
+  {path: 'home', component: ChatRoomComponent, canActivate: [AuthGuardService] },
   {path: '', redirectTo: '/room', pathMatch: 'full'},
   {path: '**', component: PageNotFoundComponent}
 ];
+
+export function tokenGetter() {
+   return localStorage.getItem("token");
+ }
 
 @NgModule({
    declarations: [
@@ -49,16 +57,34 @@ const appRoutes: Routes = [
       HttpClientModule,
       ReactiveFormsModule,
       FormsModule,
-      RouterModule.forRoot(appRoutes)
+      RouterModule.forRoot(appRoutes),
+      JwtModule.forRoot({
+         config: {
+           tokenGetter: tokenGetter
+         }
+       })
    ],
    providers: [
       WebSocketService,
-      AuthService
+      AuthService,
+      {
+         provide: HTTP_INTERCEPTORS,
+         useClass: RequestInterceptor,
+         multi: true
+      },
+      {
+         provide: HTTP_INTERCEPTORS,
+         useClass: ErrorInterceptor,
+         multi: true
+      }
    ],
    bootstrap: [
       AppComponent
    ]
 })
+
+
+
 export class AppModule { }
 
 

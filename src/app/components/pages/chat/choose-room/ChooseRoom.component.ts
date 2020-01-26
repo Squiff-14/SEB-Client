@@ -21,14 +21,6 @@ export class ChooseRoomComponent {
   ]
 
   joinRoom() {
-    var packetData: DataPacket = {
-      eventType: "on-room",
-      eventData: {
-        roomId: this.selectedRoom,
-        timestamp: new Date() 
-      }
-    }
-    console.log(this.wsService.send(packetData));
     this.router.navigate(["/chat", this.selectedRoom]);
   }
 }
