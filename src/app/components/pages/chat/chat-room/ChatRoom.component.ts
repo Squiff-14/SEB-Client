@@ -1,9 +1,10 @@
-import { RoomMessage } from './../../../../models/data-packets/room-message';
+import { timestamp } from 'rxjs/operators';
+import { SendMessagePacket } from './../../../../models/data-packets/SendMessagePacket';
+import { RoomMessagePacket } from './../../../../models/data-packets/RoomMessagePacket';
 import { WebSocketService } from '../../../../services/web-socket.service';
 import { Guid } from 'guid-typescript';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { DataPacket } from 'src/app/models/data-packets/data-packet';
 
 @Component({
     selector: 'app-chat-room',
@@ -14,33 +15,34 @@ export class ChatRoomComponent implements OnDestroy, OnInit {
 
     private roomId: string;
     private messsageContent: string;
-    private recievedMessage = "";
+    private recivedMessages: string[] = [];
 
     constructor(private wsService: WebSocketService, private route: ActivatedRoute) {
-        this.route.paramMap.subscribe(params => {
-            this.roomId = params.get("id");
-        });
-        wsService.bind("on-message", (data: any) => { JSON.stringify(data) });
-        wsService.bind("on-message", (data: any) => { this.recievedMessage = data.content });
+        this.route.paramMap.subscribe(params => this.roomId = params.get("id"));
+        wsService.receivedMessages().subscribe(message => this.recivedMessages.push(message));
     }
-
+    
+    // Too early after connection is established.
     ngOnInit(): void {
-        var packetData: DataPacket = {
+        var packetData: RoomMessagePacket = {
             eventType: "on-room",
+            timestamp: new Date(),
             eventData: {
                 roomId: this.roomId,
-                timestamp: new Date()
             }
         }
         console.log(this.wsService.send(packetData));
     }
 
     sendMessage() {
-        var dataPacket: RoomMessage = {
+        var dataPacket: SendMessagePacket = {
             eventType: "on-message",
+            timestamp: new Date(),
             eventData: {
+                // dont need sender ID as we have the websocket with the ID
+                // not being used in the server atm
+                senderId: "",
                 roomId: this.roomId,
-                timestamp: new Date(),
                 messageId: Guid.create().toString(),
                 content: this.messsageContent
             }

@@ -3,6 +3,10 @@
     <button class="m-2" id="sendButton" (click)="sendMessage()">Send</button>
     <input class="m-2" type="text" (keyup)="onKey($event)" placeholder="Enter your text" />
   </div>
-</div>
+  <div class="d-flex justify-content-center">
+    <ul>
+      <div *ngFor="let message of recivedMessages">{{message}}</div>
+    </ul>
 
-{{recievedMessage}}
+  </div>
+</div>
