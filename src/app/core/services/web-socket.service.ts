@@ -1,4 +1,4 @@
-import { DataPacket } from 'src/app/models/data-packets/data-packet';
+import { DataPacket } from 'src/app/core/models/data-packet';
 import { Injectable } from '@angular/core';
 import { Observable, observable, Subject } from 'rxjs';
 
@@ -22,27 +22,12 @@ export class WebSocketService {
     this.ws.onopen = () => console.log("Client Connected");
     this.ws.onclose = () => console.log("Client Disconencted");
     this.ws.onmessage = (event: any) => {
-
       // Could pass onto another service to manage the data packet. 
-      var dataPacket:any = JSON.parse(event.data);
-
-      // Not every data packet recieved will have content
-      // this is a test to grow message list in chat component 
-      this.recivedMessages.next(dataPacket.content);
-
+      var dataPacket: DataPacket = JSON.parse(event.data);
+      this.recivedMessages.next(dataPacket.eventData.content);
     };
     this.ws.onerror = (event) => console.log(event);
   }
-
-  // Not needed with an observable  
-  // bind(eventType: string, fn: (data: object) => any) {
-  //   this.callBacks[eventType] = this.callBacks[eventType] || [];
-  //   this.callBacks[eventType].push(fn);
-  //   return this;
-  // }
-  // managePacket(eventType: any, eventData: any) {
-  //   this.recivedMessages.next(eventData.content)
-  // }
 
   send(dataPacket: DataPacket): string {
     if (this.ws.readyState === this.socketIsOpen) {

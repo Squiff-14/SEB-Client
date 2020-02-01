@@ -1,15 +1,12 @@
-import { timestamp } from 'rxjs/operators';
-import { SendMessagePacket } from './../../../../models/data-packets/SendMessagePacket';
-import { RoomMessagePacket } from './../../../../models/data-packets/RoomMessagePacket';
-import { WebSocketService } from '../../../../services/web-socket.service';
-import { Guid } from 'guid-typescript';
+
+import { WebSocketService } from '../../../core/services/web-socket.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-chat-room',
-    templateUrl: './ChatRoom.component.html',
-    styleUrls: ['./ChatRoom.component.css']
+    templateUrl: './chat-room.component.html',
+    styleUrls: ['./chat-room.component.css']
 })
 export class ChatRoomComponent implements OnDestroy, OnInit {
 
@@ -24,30 +21,29 @@ export class ChatRoomComponent implements OnDestroy, OnInit {
     
     // Too early after connection is established.
     ngOnInit(): void {
-        var packetData: RoomMessagePacket = {
+        console.log(this.wsService.send({
             eventType: "on-room",
-            timestamp: new Date(),
             eventData: {
+                senderId: "1",
                 roomId: this.roomId,
+                content: "",
+                timestamp: new Date(),
+                username: ""
             }
-        }
-        console.log(this.wsService.send(packetData));
+        }));
     }
 
     sendMessage() {
-        var dataPacket: SendMessagePacket = {
+        console.log(this.wsService.send({
             eventType: "on-message",
-            timestamp: new Date(),
             eventData: {
-                // dont need sender ID as we have the websocket with the ID
-                // not being used in the server atm
-                senderId: "",
+                senderId: "1",
                 roomId: this.roomId,
-                messageId: Guid.create().toString(),
-                content: this.messsageContent
+                content: this.messsageContent,
+                timestamp: new Date(),
+                username: ""
             }
-        }
-        console.log(this.wsService.send(dataPacket));
+        }));
     }
 
     closeSocket() {

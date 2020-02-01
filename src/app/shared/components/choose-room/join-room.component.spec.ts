@@ -3,21 +3,21 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { ChooseRoomComponent } from './ChooseRoom.component';
+import { JoinRoomComponent } from './join-room.component';
 
 describe('ChooseRoomComponent', () => {
-  let component: ChooseRoomComponent;
-  let fixture: ComponentFixture<ChooseRoomComponent>;
+  let component: JoinRoomComponent;
+  let fixture: ComponentFixture<JoinRoomComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ChooseRoomComponent ]
+      declarations: [ JoinRoomComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ChooseRoomComponent);
+    fixture = TestBed.createComponent(JoinRoomComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
