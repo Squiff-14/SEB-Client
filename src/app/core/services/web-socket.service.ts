@@ -18,7 +18,7 @@ export class WebSocketService {
   }
 
   create(url: string) {
-    this.ws = new WebSocket(url);
+    this.ws = new WebSocket(url)
     this.ws.onopen = () => console.log("Client Connected");
     this.ws.onclose = () => console.log("Client Disconencted");
     this.ws.onmessage = (event: any) => {
@@ -29,12 +29,20 @@ export class WebSocketService {
     this.ws.onerror = (event) => console.log(event);
   }
 
-  send(dataPacket: DataPacket): string {
-    if (this.ws.readyState === this.socketIsOpen) {
-      this.ws.send(JSON.stringify(dataPacket));
-      return `Sent to server ${JSON.stringify(dataPacket)}`;
-    }
-    else return 'WebSocket connection is not open';
+  send(dataPacket: DataPacket){
+    var setTimeoutId = setTimeout(() =>{
+      try{
+        if (this.ws.readyState === this.socketIsOpen) {
+          this.ws.send(JSON.stringify(dataPacket));
+          console.log(`Sent to server ${JSON.stringify(dataPacket)}`);
+          clearTimeout(setTimeoutId);
+        }
+      }
+      catch (err){
+        console.log("connection not established");
+        console.log(err);
+      }
+    }, 100)
   }
 
   close() {

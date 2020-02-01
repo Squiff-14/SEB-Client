@@ -1,4 +1,4 @@
-
+import { DataPacket } from './../../../core/models/data-packet';
 import { WebSocketService } from '../../../core/services/web-socket.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
@@ -18,10 +18,11 @@ export class ChatRoomComponent implements OnDestroy, OnInit {
         this.route.paramMap.subscribe(params => this.roomId = params.get("id"));
         wsService.receivedMessages().subscribe(message => this.recivedMessages.push(message));
     }
-    
+
     // Too early after connection is established.
     ngOnInit(): void {
-        console.log(this.wsService.send({
+
+        this.wsService.send({
             eventType: "on-room",
             eventData: {
                 senderId: "1",
@@ -30,11 +31,11 @@ export class ChatRoomComponent implements OnDestroy, OnInit {
                 timestamp: new Date(),
                 username: ""
             }
-        }));
+        });
     }
 
     sendMessage() {
-        console.log(this.wsService.send({
+      this.wsService.send({
             eventType: "on-message",
             eventData: {
                 senderId: "1",
@@ -43,7 +44,7 @@ export class ChatRoomComponent implements OnDestroy, OnInit {
                 timestamp: new Date(),
                 username: ""
             }
-        }));
+        });
     }
 
     closeSocket() {

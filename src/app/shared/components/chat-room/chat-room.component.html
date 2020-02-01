@@ -1,12 +1,15 @@
+
 <div class="container">
-  <div class="d-flex justify-content-center">
+  
+  <div class="d-flex justify-content-center chat-box">
+    <ul class="w-75 overflow-auto">
+      <div *ngFor="let message of recivedMessages">{{message}}</div>
+    </ul>
+  </div>
+  <div class="d-flex justify-content-center fixed-bottom mb-5 pb-5">
     <button class="m-2" id="sendButton" (click)="sendMessage()">Send</button>
     <input class="m-2" type="text" (keyup)="onKey($event)" placeholder="Enter your text" />
   </div>
-  <div class="d-flex justify-content-center">
-    <ul>
-      <div *ngFor="let message of recivedMessages">{{message}}</div>
-    </ul>
-
-  </div>
 </div>
+
+
