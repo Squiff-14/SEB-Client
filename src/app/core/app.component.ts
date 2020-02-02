@@ -1,6 +1,6 @@
 import { WebSocketService } from './services/web-socket.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';;
-import decode from 'jwt-decode';
+
 import { AuthService } from './services/auth.service';
 
 @Component({
@@ -17,8 +17,7 @@ export class AppComponent{
 
     //WebSocket connection is re-established upon refresh if the user is logged-in
     if (this.isLoggedIn) {
-      const tokenPayload = decode(localStorage.getItem('token'));
-      this.wsService.create(`ws://localhost:5000?id=${tokenPayload.nameid}`);
+      this.wsService.create(`ws://localhost:5000?`);
     }
 
   }

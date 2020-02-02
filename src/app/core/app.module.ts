@@ -32,10 +32,6 @@ const appRoutes: Routes = [
    { path: '**', component: PageNotFoundComponent }
 ];
 
-export function tokenGetter() {
-   return localStorage.getItem("token");
-}
-
 @NgModule({
    declarations: [
       AppComponent,
@@ -53,12 +49,7 @@ export function tokenGetter() {
       HttpClientModule,
       ReactiveFormsModule,
       FormsModule,
-      RouterModule.forRoot(appRoutes),
-      JwtModule.forRoot({
-         config: {
-            tokenGetter: tokenGetter
-         }
-      })
+      RouterModule.forRoot(appRoutes)
    ],
    providers: [
       WebSocketService,

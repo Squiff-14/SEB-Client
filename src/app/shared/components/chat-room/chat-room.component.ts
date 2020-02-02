@@ -16,7 +16,7 @@ export class ChatRoomComponent implements OnDestroy, OnInit {
 
     constructor(private wsService: WebSocketService, private route: ActivatedRoute) {
         this.route.paramMap.subscribe(params => this.roomId = params.get("id"));
-        wsService.receivedMessages().subscribe(message => this.recivedMessages.push(message));
+        wsService.receivedMessages().subscribe(message => this.recivedMessages.push(message.eventData.content));
     }
 
     // Too early after connection is established.

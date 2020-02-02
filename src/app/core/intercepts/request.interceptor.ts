@@ -10,11 +10,15 @@ export class RequestInterceptor implements HttpInterceptor {
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler): Observable<HttpEvent<any>> {
-    const cloneReq = req.clone({ url: environment.apiUrl + `${req.url}`});
-    
-    const jwt = localStorage.getItem('id_token');
+    var cloneReq = req.clone({ url: environment.apiUrl + `${req.url}` });
+
+    const jwt = JSON.parse(localStorage.getItem('token'));
     if (jwt) {
-      cloneReq.headers.set("Authorization", `Bearer ${jwt}`)
+     cloneReq = cloneReq.clone({
+        setHeaders: {
+          Authorization: `Bearer ${jwt.token}`
+        }
+      });
       return next.handle(cloneReq);
     }
 

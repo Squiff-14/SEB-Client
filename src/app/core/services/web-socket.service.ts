@@ -8,31 +8,24 @@ import { Observable, observable, Subject } from 'rxjs';
 export class WebSocketService {
 
   private ws: WebSocket;
-  private socketIsOpen = 1;
-
-  //To be improved
-  private recivedMessages: Subject<string>;
+  private recivedMessages: Subject<DataPacket>;
 
   constructor() {
-    this.recivedMessages = new Subject<string>();
+    this.recivedMessages = new Subject<DataPacket>();
   }
 
   create(url: string) {
     this.ws = new WebSocket(url)
     this.ws.onopen = () => console.log("Client Connected");
     this.ws.onclose = () => console.log("Client Disconencted");
-    this.ws.onmessage = (event: any) => {
-      // Could pass onto another service to manage the data packet. 
-      var dataPacket: DataPacket = JSON.parse(event.data);
-      this.recivedMessages.next(dataPacket.eventData.content);
-    };
+    this.ws.onmessage = (event: any) => this.recivedMessages.next(JSON.parse(event.data));
     this.ws.onerror = (event) => console.log(event);
   }
 
   send(dataPacket: DataPacket){
     var setTimeoutId = setTimeout(() =>{
       try{
-        if (this.ws.readyState === this.socketIsOpen) {
+        if (this.ws.readyState === WebSocket.OPEN) {
           this.ws.send(JSON.stringify(dataPacket));
           console.log(`Sent to server ${JSON.stringify(dataPacket)}`);
           clearTimeout(setTimeoutId);

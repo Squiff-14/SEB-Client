@@ -1,64 +1,45 @@
-import { Observable } from 'rxjs';
-import { AuthService } from '../../../core/services/auth.service';
-import { Component, OnInit, NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Url } from 'url';
-import { first } from 'rxjs/operators';
 
-@NgModule({
-  imports: [CommonModule]
-})
+import { AuthService } from '../../../core/services/auth.service';
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
-  // tslint:disable-next-line: component-selector
-  selector: 'app-login',
+  selector: 'app-Login',
   templateUrl: './Login.component.html',
   styleUrls: ['./Login.component.css']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
 
-  form: FormGroup;
-  returnUrl: string;
+  private invalidDetails: boolean;
+  private loginForm: FormGroup;
 
-  private isLoggedIn: boolean;
-
-  constructor(private fb: FormBuilder, 
-              private authService: AuthService, 
-              private router: Router,
-              private route: ActivatedRoute) {
-
-    this.authService.isLoggedIn().subscribe( result => this.isLoggedIn = result);
-    if (this.isLoggedIn) {
-      this.router.navigate['/']
-    }
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
+    this.invalidDetails = false;
   }
 
   ngOnInit() {
-    this.form = this.fb.group({
+    this.loginForm = this.fb.group({
       username: ['', Validators.required],
       password: ['', Validators.required]
     });
-
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-
   }
 
-  onSubmit(){
-    if(this.form.invalid){
-      return;
+  private onSubmit() {
+    if (this.loginForm.invalid) return;
+    var username: string = this.loginForm.value.username;
+    var password: string = this.loginForm.value.password;
+    if (username && password) {
+      this.authService.login(username, password)
+        .subscribe(
+          data => {
+            this.router.navigate(['/'])
+          },
+          err => {
+            console.log(err)
+            this.invalidDetails = true;
+          })
     }
-    //this.loading = true;
-    const val = this.form.value;
-    this.authService.login(val.username, val.password)
-      .pipe(first())
-      .subscribe(
-        data => {
-          this.router.navigate([this.returnUrl]);
-        },
-        error =>{
-          console.log("Error Occured on Submit:", error.message);
-        });
   }
+
 }

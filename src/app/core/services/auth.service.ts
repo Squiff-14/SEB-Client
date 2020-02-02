@@ -1,5 +1,4 @@
 import { WebSocketService } from './web-socket.service';
-import { JwtHelperService } from '@auth0/angular-jwt';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -12,7 +11,7 @@ import decode from 'jwt-decode';
 export class AuthService {
 
 
-  constructor(private http: HttpClient, private jwtHelper: JwtHelperService, private wsService: WebSocketService) { }
+  constructor(private http: HttpClient, private wsService: WebSocketService) { }
 
   private isLoggedInSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.hasToken());
 
@@ -21,10 +20,11 @@ export class AuthService {
     return this.http.post<any>('/Authentication/login', { username, password }) //{withCredentials: true}
       .pipe(map(token => {     
         localStorage.setItem('token', JSON.stringify(token));
-        const tokenPayload = decode(JSON.stringify(token));
+        // const tokenPayload = decode(JSON.stringify(token));
+        this.http.get("test");
 
         //WebSocket connection is established upon login
-        this.wsService.create(`ws://localhost:5000?id=${tokenPayload.nameid}`); 
+        this.wsService.create(`ws://localhost:5000`); 
         this.isLoggedInSubject.next(true);
         return token;
       }))
@@ -37,7 +37,7 @@ export class AuthService {
 
   public hasToken(): boolean {
     const token = localStorage.getItem('token');
-    if (this.jwtHelper.isTokenExpired(token)){
+    if (!token){
       return false;
     }
     return true;

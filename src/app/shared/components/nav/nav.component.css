@@ -1,7 +1,11 @@
-.logo {
-    height: 25%;
-    width: 75%;
+.login {
+    width: 100%;
 }
+
+ .nav{
+     width: 30%;
+     margin-right: 10%;
+ }
 
 .navbar-nav .nav-item {
     padding-left: 10%;
@@ -14,6 +18,3 @@
     font-weight: bolder;
 }
 
-.navbar-nav .nav-link :hover {
-    color: #F47E4A;
-}

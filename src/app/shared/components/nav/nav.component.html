@@ -1,14 +1,13 @@
 
 
 <nav class="navbar navbar-expand-lg white">
-    <a><img class="logo" src="assets/img/SEB-Logo.png"><img></a>
-    <ul *ngIf="isLoggedIn"  class="navbar-nav ">
-        <li>
-            <a class="nav-link" href=room>Room</a>
-        </li>
-
+    <img [ngClass]="{'login' : !isLoggedIn , 'nav': isLoggedIn }" src="assets/img/SEB-Logo.png"><img>
+    <ul *ngIf="isLoggedIn" class="navbar-nav">
         <li>
             <a class="nav-link" href="Profile">Profile</a>
+        </li>
+        <li>
+            <a class="nav-link" href=room>Chat</a>
         </li>
         <li>
             <a href="login" (click)="authService.logout()" class="nav-link">Logout</a>
