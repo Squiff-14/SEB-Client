@@ -1,8 +1,8 @@
-import { RoomService } from './../../../core/services/room.service';
-import { DataPacket } from '../../../core/models/data-packet'
+import { RoomService } from '../../../../core/services/room.service';
+import { DataPacket } from '../../../../core/models/data-packet'
 import { timestamp } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { WebSocketService } from '../../../core/services/web-socket.service';
+import { WebSocketService } from '../../../../core/services/web-socket.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 
@@ -39,7 +39,10 @@ export class JoinRoomComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.roomForm.invalid) return;
+    if (this.roomForm.invalid) {
+      this.invalidForm = true;
+      return;
+    }
     this.roomService.create(this.roomForm.value.roomName).subscribe(
       (room) => {
         this.router.navigate(["/chat", room.roomId]);

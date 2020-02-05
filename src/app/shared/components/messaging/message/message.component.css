@@ -1,0 +1,30 @@
+.msg-container{
+    margin-left: 10px;
+    border-radius: 25px;
+    padding: 10px;
+    position: relative;
+    color: #F5F2F1;
+}
+
+.msg-container-sent{
+    margin-left: 10px;
+    border-radius: 25px;
+    padding: 10px;
+    position: relative;
+    color: black;
+}
+
+.msg-time{
+    position: absolute;
+    left: 4px;
+    bottom: -15px;
+    color: #010101;
+    font-size: 10px;
+    min-width: 200px;
+}
+
+.img-container img {
+    border-radius: 100%;
+    height: 45px;
+    width: 45px;
+}

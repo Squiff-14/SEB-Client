@@ -18,13 +18,12 @@ export class AuthService {
 
   public login(username: string, password: string) {
     return this.http.post<any>('/Authentication/login', { username, password }) //{withCredentials: true}
-      .pipe(map(token => {     
+      .pipe(map(token => {
         localStorage.setItem('token', JSON.stringify(token));
-        // const tokenPayload = decode(JSON.stringify(token));
         this.http.get("test");
 
         //WebSocket connection is established upon login
-        this.wsService.create(`ws://localhost:5000`); 
+        this.wsService.create(`ws://localhost:5000`);
         this.isLoggedInSubject.next(true);
         return token;
       }))
@@ -37,14 +36,16 @@ export class AuthService {
 
   public hasToken(): boolean {
     const token = localStorage.getItem('token');
-    if (!token){
+    if (!token) {
       return false;
     }
     return true;
   }
 
-  public isLoggedIn(){
+  public isLoggedIn() {
     return this.isLoggedInSubject.asObservable();
   }
+
+
 
 }

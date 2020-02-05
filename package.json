@@ -25,6 +25,7 @@
     "guid-typescript": "^1.0.9",
     "jquery": "^3.4.1",
     "jwt-decode": "^2.2.0",
+    "moment": "^2.24.0",
     "popper.js": "^1.16.1",
     "rxjs": "~6.4.0",
     "tslib": "^1.10.0",

@@ -2,10 +2,11 @@
 export interface DataPacket { 
     eventType: String;
     eventData: {
-        senderId: string;
-        roomId: string;
-        content: string;
+        senderId: Number;
+        roomId: String;
+        content: String;
         timestamp: Date;
-        username: string;
+        username: String;
+        fromCurrentUser: boolean;
     }
 }
