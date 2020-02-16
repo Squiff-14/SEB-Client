@@ -11,19 +11,15 @@ import decode from 'jwt-decode';
 export class AuthService {
 
 
-  constructor(private http: HttpClient, private wsService: WebSocketService) { }
+  constructor(private http: HttpClient) { }
 
   private isLoggedInSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.hasToken());
-
 
   public login(username: string, password: string) {
     return this.http.post<any>('/Authentication/login', { username, password }) //{withCredentials: true}
       .pipe(map(token => {
         localStorage.setItem('token', JSON.stringify(token));
         this.http.get("test");
-
-        //WebSocket connection is established upon login
-        this.wsService.create(`ws://localhost:5000`);
         this.isLoggedInSubject.next(true);
         return token;
       }))
@@ -42,10 +38,12 @@ export class AuthService {
     return true;
   }
 
+  public currentUser(): number {
+    return +decode(localStorage.getItem('token')).nameid;
+  }
+
   public isLoggedIn() {
     return this.isLoggedInSubject.asObservable();
   }
-
-
 
 }

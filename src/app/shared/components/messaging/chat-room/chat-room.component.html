@@ -4,7 +4,7 @@
 <div class="container-fluid orange ">
   <div class="d-flex justify-content-center ">
     <ul class="w-50 overflow-auto chat-box">
-      <div *ngFor='let item of dataPackets | orderBy:eventData.timestamp'>
+      <div *ngFor='let item of dataPackets'>
           <app-message [dataPacket]="item"></app-message>
   
       </div>

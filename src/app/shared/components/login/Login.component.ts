@@ -1,3 +1,4 @@
+import { WebSocketService } from './../../../core/services/web-socket.service';
 
 import { AuthService } from '../../../core/services/auth.service';
 import { Component, OnInit } from '@angular/core';
@@ -14,7 +15,8 @@ export class LoginComponent implements OnInit {
   private invalidDetails: boolean;
   private loginForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
+  constructor(private fb: FormBuilder, private authService: AuthService,
+    private router: Router, private wsService: WebSocketService) {
     this.invalidDetails = false;
   }
 
@@ -33,6 +35,7 @@ export class LoginComponent implements OnInit {
       this.authService.login(username, password)
         .subscribe(
           data => {
+            this.wsService.create(`ws://localhost:5000`);
             this.router.navigate(['/'])
           },
           err => {

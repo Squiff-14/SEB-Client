@@ -1,3 +1,7 @@
+import { timestamp } from 'rxjs/operators';
+import { MessageService } from './../../../../core/services/message.service';
+import { Message } from './../../../../core/models/message';
+import { AuthService } from './../../../../core/services/auth.service';
 import { DataPacket } from '../../../../core/models/data-packet';
 import { WebSocketService } from '../../../../core/services/web-socket.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
@@ -10,45 +14,64 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ChatRoomComponent implements OnDestroy, OnInit {
 
-    private roomId: string;
+    private userId: number;
+    private roomId: number;
     private messsageContent: string;
-    private dataPackets: DataPacket[] = [];
+    private messages: Message[] = [];
 
     // Get room data
     // Whos in currently
     // Room name
     // who is not in
 
-    constructor(private wsService: WebSocketService, private route: ActivatedRoute) {
-        this.route.paramMap.subscribe(params => this.roomId = params.get("id"));
-        wsService.receivedMessages().subscribe(dataPacket => {
-            this.dataPackets.push(dataPacket)
+    constructor(private wsService: WebSocketService, private route: ActivatedRoute,
+        private authService: AuthService, private messageService: MessageService) {
+
+        this.userId = this.authService.currentUser();
+        this.route.paramMap.subscribe(params => this.roomId = +params.get("id"));
+        this.messageService.getMessageHistory(this.roomId, 0).subscribe({
+            next: (messages) => messages.push(...messages),
+            error: (err) => console.log(err)
         });
+
+        wsService.receivedMessages().subscribe(message => {
+            if(this.messages.includes(message))
+            this.messages.push(message);
+        });
+
     }
 
-    // Too early after connection is established.
     ngOnInit(): void {
 
         this.wsService.send({
             eventType: "on-room",
             eventData: {
-                senderId: this.wsService.CurrentUser(),
+                senderId: this.authService.currentUser(),
                 roomId: this.roomId,
-                content: "",
+                content: "Joined the room.",
                 timestamp: new Date(),
                 username: "",
                 fromCurrentUser: false
             }
         });
 
-        // 
     }
 
     sendMessage() {
+
+        this.messages.push({
+            // GUID that goes into the DB for message ID
+            // That way could see if message exsits in list. 
+            message: null, 
+            user: this.userId,
+            sentAt: null,
+            content: this.messsageContent 
+        })
+
         this.wsService.send({
             eventType: "on-message",
             eventData: {
-                senderId: this.wsService.CurrentUser(),
+                senderId: this.authService.currentUser(),
                 roomId: this.roomId,
                 content: this.messsageContent,
                 timestamp: new Date(),
