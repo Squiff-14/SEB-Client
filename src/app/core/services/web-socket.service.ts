@@ -32,7 +32,7 @@ export class WebSocketService {
         content: dataPacket.eventData.content
       } 
 
-      dataPacket.eventData.fromCurrentUser = (this.authService.currentUser() === dataPacket.eventData.senderId)
+      dataPacket.eventData.fromCurrentUser = (this.authService.currentUser() === dataPacket.eventData.senderId);
       this.recivedMessages.next(message);
       
     };

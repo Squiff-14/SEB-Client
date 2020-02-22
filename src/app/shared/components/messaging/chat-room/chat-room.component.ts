@@ -2,7 +2,6 @@ import { timestamp } from 'rxjs/operators';
 import { MessageService } from './../../../../core/services/message.service';
 import { Message } from './../../../../core/models/message';
 import { AuthService } from './../../../../core/services/auth.service';
-import { DataPacket } from '../../../../core/models/data-packet';
 import { WebSocketService } from '../../../../core/services/web-socket.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
@@ -30,12 +29,16 @@ export class ChatRoomComponent implements OnDestroy, OnInit {
         this.userId = this.authService.currentUser();
         this.route.paramMap.subscribe(params => this.roomId = +params.get("id"));
         this.messageService.getMessageHistory(this.roomId, 0).subscribe({
-            next: (messages) => messages.push(...messages),
+            next: (res) => {
+                console.log(res)
+                // this.messages.push(...res.history)
+            },
             error: (err) => console.log(err)
         });
 
         wsService.receivedMessages().subscribe(message => {
-            if(this.messages.includes(message))
+            // if(this.messages.includes(message))
+            console.log(message)
             this.messages.push(message);
         });
 
@@ -59,14 +62,14 @@ export class ChatRoomComponent implements OnDestroy, OnInit {
 
     sendMessage() {
 
-        this.messages.push({
-            // GUID that goes into the DB for message ID
-            // That way could see if message exsits in list. 
-            message: null, 
-            user: this.userId,
-            sentAt: null,
-            content: this.messsageContent 
-        })
+        // this.messages.push({
+        //     // GUID that goes into the DB for message ID
+        //     // That way could see if message exsits in list. 
+        //     message: null, 
+        //     user: this.userId,
+        //     sentAt: null,
+        //     content: this.messsageContent 
+        // })
 
         this.wsService.send({
             eventType: "on-message",

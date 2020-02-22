@@ -5,13 +5,13 @@
     <img src={{imagePath}}/>
   </div>
   <div class="msg-container black">
-    {{message}}
+    {{content}}
     <span class="msg-time">{{timeSent | date:'short'}}</span>
   </div>
 </div>
 <div *ngIf="!fromCurrentUser" class="d-flex justify-content-end mb-4 ">
   <div class="msg-container-sent white">
-    {{message}}
+    {{content}}
     <span class="msg-time">{{timeSent | date:'short'}}</span>
   </div>
   <div class="img-container">

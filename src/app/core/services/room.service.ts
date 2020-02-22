@@ -17,7 +17,7 @@ getRooms() : Observable<any> {
 
 create(roomName: string) : Observable<any> {
   var createdBy : string = decode(localStorage.getItem('token')).nameid;
-  return this.http.post("/Room/create", {roomName, createdBy});
+  return this.http.post("/Room", {roomName, createdBy});
 }
 
 }

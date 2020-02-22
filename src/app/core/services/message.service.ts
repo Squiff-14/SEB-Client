@@ -13,7 +13,7 @@ export class MessageService {
   public getMessageHistory(roomId: number, beforeId: number) {
 
     const userId = this.authService.currentUser();
-    return this.http.get<Message[]>(`/Message/${roomId}/history/${userId}?${beforeId}`);
+    return this.http.get<any>(`/Message/${roomId}/history/${userId}?${beforeId}`);
 
   }
 
