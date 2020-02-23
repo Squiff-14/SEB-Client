@@ -1,3 +1,34 @@
+
 .chat-box{
-    height: 500px;
+    height: 800px;
+    background-color: white;
+    border-radius: 10%;
+}
+
+.input-messaage {
+    width: 100%;
+    height: 100%;
+    border: none;
+    padding: 10px;
+    background: white;
+}
+
+  
+.chat-input {
+    background: white;
+}
+
+.chat-input-box {
+    width: 100%;
+    height: 100%;
+    border: none;
+    padding: 10px;
+}
+
+.field1{
+    width: 90%;
+}
+
+.field2{
+    width: 10%;
 }

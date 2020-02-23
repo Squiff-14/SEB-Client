@@ -31,8 +31,6 @@ export class WebSocketService {
         sentAt: dataPacket.eventData.timestamp,
         content: dataPacket.eventData.content
       } 
-
-      dataPacket.eventData.fromCurrentUser = (this.authService.currentUser() === dataPacket.eventData.senderId)
       this.recivedMessages.next(message);
       
     };

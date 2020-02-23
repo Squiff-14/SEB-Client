@@ -9,11 +9,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavComponent implements OnInit {
 
-  private isLoggedIn: boolean
-  constructor(private authService: AuthService) {
-    this.authService.isLoggedIn().subscribe(result => this.isLoggedIn = result);
-  }
-  
+  constructor() { }
+
   ngOnInit() {
   }
 

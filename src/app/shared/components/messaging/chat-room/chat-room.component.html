@@ -1,17 +1,29 @@
-<div class="d-flex justify-content-center mt-3">
-  <h2>Chat Room</h2>
+<div class="d-flex justify-content-center mt-2">
+  <h2>TMS Messenger</h2>
 </div>
-<div class="container-fluid orange ">
-  <div class="d-flex justify-content-center ">
-    <ul class="w-50 overflow-auto chat-box">
-      <div *ngFor='let item of dataPackets'>
-          <app-message [dataPacket]="item"></app-message>
-  
+<div class="container-fluid mt-2">
+  <div class="d-flex justify-content-center" >
+    <ol class="w-50 overflow-auto chat-box shadow p-5"
+    infiniteScroll
+    [scrollWindow]="false"
+    [infiniteScrollDistance]="2"
+    [infiniteScrollThrottle]="50"
+    (scrolledUp)="onScroll()">
+      <div *ngFor='let message of messages'>
+        <app-message [message]="message"></app-message>
       </div>
-    </ul>
+    </ol>
   </div>
   <div class="d-flex justify-content-center">
-    <button class="m-2" id="sendButton" (click)="sendMessage()">Send</button>
-    <input class="m-2" type="text" (keyup)="onKey($event)" placeholder="Enter your text" />
+    <form class="w-50" [formGroup]="messageForm" (ngSubmit)="sendMessage()">
+      <div class="d-flex justify-content-between align-items-center w-100 chat-input shadow-lg">
+        <div class="field1">
+          <input type="text" class="chat-input-box" formControlName="messageBox" placeholder="..." />
+        </div>
+        <div class="field2">
+          <button class="btn btn-dark w-100" type="submit">Send</button>
+        </div>
+      </div>
+    </form>
   </div>
 </div>

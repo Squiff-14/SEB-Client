@@ -24,6 +24,7 @@ import { WebSocketService } from '../core/services/web-socket.service';
 import { ErrorInterceptor } from './intercepts/error.interceptor';
 import { RequestInterceptor } from '../core/intercepts/request.interceptor'
 
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 const appRoutes: Routes = [
    { path: 'chat/:id', component: ChatRoomComponent, canActivate: [AuthGuardService] },
@@ -52,7 +53,8 @@ const appRoutes: Routes = [
       HttpClientModule,
       ReactiveFormsModule,
       FormsModule,
-      RouterModule.forRoot(appRoutes)
+      RouterModule.forRoot(appRoutes),
+      InfiniteScrollModule
    ],
    providers: [
       WebSocketService,
@@ -73,8 +75,8 @@ const appRoutes: Routes = [
    ]
 })
 
-
-
 export class AppModule { }
+
+
 
 

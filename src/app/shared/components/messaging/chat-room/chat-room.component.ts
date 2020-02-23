@@ -1,11 +1,14 @@
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { timestamp } from 'rxjs/operators';
 import { MessageService } from './../../../../core/services/message.service';
 import { Message } from './../../../../core/models/message';
 import { AuthService } from './../../../../core/services/auth.service';
 import { DataPacket } from '../../../../core/models/data-packet';
 import { WebSocketService } from '../../../../core/services/web-socket.service';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+
+
 
 @Component({
     selector: 'app-chat-room',
@@ -14,29 +17,38 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ChatRoomComponent implements OnDestroy, OnInit {
 
-    private userId: number;
     private roomId: number;
-    private messsageContent: string;
     private messages: Message[] = [];
+    private messageForm: FormGroup;
 
     // Get room data
     // Whos in currently
     // Room name
     // who is not in
 
-    constructor(private wsService: WebSocketService, private route: ActivatedRoute,
-        private authService: AuthService, private messageService: MessageService) {
+    @ViewChild('scrollMe', {static: true}) private myScrollContainer: ElementRef;
 
-        this.userId = this.authService.currentUser();
+    constructor(private wsService: WebSocketService,
+        private route: ActivatedRoute,
+        private authService: AuthService,
+        private messageService: MessageService,
+        private fb: FormBuilder) {
+
+        this.messageForm = this.fb.group({
+            messageBox: [''] 
+        })
+
         this.route.paramMap.subscribe(params => this.roomId = +params.get("id"));
-        this.messageService.getMessageHistory(this.roomId, 0).subscribe({
-            next: (messages) => messages.push(...messages),
+        this.messageService.getMessageHistory(this.roomId, new Date().toISOString()).subscribe({
+            next: (res) => {
+                this.messages.push(...res.history)
+            },
             error: (err) => console.log(err)
         });
 
         wsService.receivedMessages().subscribe(message => {
-            if(this.messages.includes(message))
-            this.messages.push(message);
+            if (this.messages.includes(message))
+                this.messages.push(message);
         });
 
     }
@@ -59,38 +71,49 @@ export class ChatRoomComponent implements OnDestroy, OnInit {
 
     sendMessage() {
 
-        this.messages.push({
-            // GUID that goes into the DB for message ID
-            // That way could see if message exsits in list. 
-            message: null, 
-            user: this.userId,
-            sentAt: null,
-            content: this.messsageContent 
-        })
-
-        this.wsService.send({
-            eventType: "on-message",
-            eventData: {
-                senderId: this.authService.currentUser(),
-                roomId: this.roomId,
-                content: this.messsageContent,
-                timestamp: new Date(),
-                username: "",
-                fromCurrentUser: false
-            }
-        });
+        var message :string = this.messageForm.value.messageBox; 
+        if(message){
+            this.messages.push({
+                // GUID that goes into the DB for message ID
+                // That way could see if message exsits in list. 
+                message: null,
+                user: this.authService.currentUser(),
+                sentAt: null,
+                content: message
+            })
+    
+            this.wsService.send({
+                eventType: "on-message",
+                eventData: {
+                    senderId: this.authService.currentUser(),
+                    roomId: this.roomId,
+                    content: message,
+                    timestamp: new Date(),
+                    username: "",
+                    fromCurrentUser: false
+                }
+            });
+            this.messageForm.reset();
+            this.myScrollContainer.nativeElement.scrollIntoView(false);
+        }
     }
 
     closeSocket() {
         this.wsService.close();
     }
 
-    onKey(event: any) { // without type info
-        this.messsageContent = event.target.value;
-    }
-
     ngOnDestroy(): void {
         this.closeSocket();
     }
+
+    onScroll(){
+        this.messageService.getMessageHistory(this.roomId, this.messages[0].sentAt).subscribe({
+            next: (res) => {
+                this.messages.unshift(...res.history)
+            },
+            error: (err) => console.log(err)
+        });
+    }
+  
 
 }

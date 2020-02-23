@@ -19,7 +19,6 @@ export class AuthService {
     return this.http.post<any>('/Authentication/login', { username, password }) //{withCredentials: true}
       .pipe(map(token => {
         localStorage.setItem('token', JSON.stringify(token));
-        this.http.get("test");
         this.isLoggedInSubject.next(true);
         return token;
       }))

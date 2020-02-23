@@ -1,20 +1,24 @@
 
 
-<div *ngIf="fromCurrentUser" class="d-flex justify-content-start mb-4 ">
-  <div class="img-container">
-    <img src={{imagePath}}/>
-  </div>
-  <div class="msg-container black">
-    {{message}}
-    <span class="msg-time">{{timeSent | date:'short'}}</span>
-  </div>
-</div>
-<div *ngIf="!fromCurrentUser" class="d-flex justify-content-end mb-4 ">
-  <div class="msg-container-sent white">
-    {{message}}
-    <span class="msg-time">{{timeSent | date:'short'}}</span>
-  </div>
-  <div class="img-container">
-    <img src={{imagePath}}/>
+<div *ngIf="message" class="d-flex justify-content-start mb-4 ">
+  <div class="d-flex align-items-center">
+    <div class="img-container">
+      <img src={{imagePath}}/>
+    </div>
+    <div class="msg-container">
+      {{message.content}}
+      <span class="msg-time">{{timeSent | date:'short'}}</span>
+    </div>
   </div>
 </div>
+<!-- <div *ngIf="message" class="d-flex justify-content-end mb-4 ">
+  <div class="d-flex align-items-center">
+    <div class="msg-container-sent">
+      {{message.content}}
+      <span class="msg-time-sent">{{message.sentAt | date:'short'}}</span>
+    </div>
+    <div class="img-container">
+      <img src={{imagePath}}/>
+    </div>
+  </div>
+</div> -->

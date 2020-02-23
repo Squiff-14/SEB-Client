@@ -1,20 +1,15 @@
-.login {
-    width: 100%;
+
+ .navbar img {
+    width: 100px;
 }
 
- .nav{
-     width: 30%;
-     margin-right: 10%;
- }
-
 .navbar-nav .nav-item {
-    padding-left: 10%;
-    padding-right: 10%;
+   min-width: 100px;
 }
 
 .navbar-nav .nav-link {
-    padding-right: 60px;
     color: black;
+    text-align: center;
     font-weight: bolder;
 }
 

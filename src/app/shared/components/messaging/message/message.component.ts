@@ -1,3 +1,4 @@
+import { Message } from './../../../../core/models/message';
 import { DataPacket } from 'src/app/core/models/data-packet';
 import { Component, OnInit, Input } from '@angular/core';
 import * as moment from 'moment';
@@ -9,20 +10,18 @@ import * as moment from 'moment';
 export class MessageComponent implements OnInit{
 
   private fromCurrentUser: boolean
-  private message: String;
+  private content: String;
   private timeSent: Date;
 
   @Input() imagePath: String;
-  @Input() dataPacket: DataPacket;
+  @Input() message: Message;
+
+  
 
   constructor() {}
 
   ngOnInit() {
-    if(this.dataPacket){
-      this.fromCurrentUser = this.dataPacket.eventData.fromCurrentUser
-      this.message = this.dataPacket.eventData.content;
-      this.timeSent = this.dataPacket.eventData.timestamp;
-    }
+      this.timeSent = this.message.sentAt;
   }
 
 }
