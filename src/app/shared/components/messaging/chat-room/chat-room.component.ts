@@ -3,7 +3,6 @@ import { timestamp } from 'rxjs/operators';
 import { MessageService } from './../../../../core/services/message.service';
 import { Message } from './../../../../core/models/message';
 import { AuthService } from './../../../../core/services/auth.service';
-import { DataPacket } from '../../../../core/models/data-packet';
 import { WebSocketService } from '../../../../core/services/web-socket.service';
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
@@ -26,7 +25,7 @@ export class ChatRoomComponent implements OnDestroy, OnInit {
     // Room name
     // who is not in
 
-    @ViewChild('scrollMe', {static: true}) private myScrollContainer: ElementRef;
+    @ViewChild('scrollMe', { static: true }) private myScrollContainer: ElementRef;
 
     constructor(private wsService: WebSocketService,
         private route: ActivatedRoute,
@@ -35,10 +34,11 @@ export class ChatRoomComponent implements OnDestroy, OnInit {
         private fb: FormBuilder) {
 
         this.messageForm = this.fb.group({
-            messageBox: [''] 
+            messageBox: ['']
         })
 
         this.route.paramMap.subscribe(params => this.roomId = +params.get("id"));
+
         this.messageService.getMessageHistory(this.roomId, new Date().toISOString()).subscribe({
             next: (res) => {
                 this.messages.push(...res.history)
@@ -71,8 +71,8 @@ export class ChatRoomComponent implements OnDestroy, OnInit {
 
     sendMessage() {
 
-        var message :string = this.messageForm.value.messageBox; 
-        if(message){
+        var message: string = this.messageForm.value.messageBox;
+        if (message) {
             this.messages.push({
                 // GUID that goes into the DB for message ID
                 // That way could see if message exsits in list. 
@@ -81,7 +81,7 @@ export class ChatRoomComponent implements OnDestroy, OnInit {
                 sentAt: null,
                 content: message
             })
-    
+
             this.wsService.send({
                 eventType: "on-message",
                 eventData: {
@@ -96,6 +96,7 @@ export class ChatRoomComponent implements OnDestroy, OnInit {
             this.messageForm.reset();
             this.myScrollContainer.nativeElement.scrollIntoView(false);
         }
+
     }
 
     closeSocket() {
@@ -106,7 +107,7 @@ export class ChatRoomComponent implements OnDestroy, OnInit {
         this.closeSocket();
     }
 
-    onScroll(){
+    onScroll() {
         this.messageService.getMessageHistory(this.roomId, this.messages[0].sentAt).subscribe({
             next: (res) => {
                 this.messages.unshift(...res.history)
@@ -114,6 +115,6 @@ export class ChatRoomComponent implements OnDestroy, OnInit {
             error: (err) => console.log(err)
         });
     }
-  
+
 
 }

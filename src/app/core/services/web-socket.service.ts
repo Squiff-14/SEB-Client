@@ -31,8 +31,7 @@ export class WebSocketService {
         sentAt: dataPacket.eventData.timestamp,
         content: dataPacket.eventData.content
       } 
-      this.recivedMessages.next(message);
-      
+      this.recivedMessages.next(message); 
     };
     this.ws.onerror = (event) => console.log(event);
   }

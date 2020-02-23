@@ -2,6 +2,7 @@ import { Message } from './../../../../core/models/message';
 import { DataPacket } from 'src/app/core/models/data-packet';
 import { Component, OnInit, Input } from '@angular/core';
 import * as moment from 'moment';
+
 @Component({
   selector: 'app-message',
   templateUrl: './message.component.html',
@@ -16,7 +17,6 @@ export class MessageComponent implements OnInit{
   @Input() imagePath: String;
   @Input() message: Message;
 
-  
 
   constructor() {}
 
