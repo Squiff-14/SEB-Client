@@ -25,6 +25,9 @@ import { ErrorInterceptor } from './intercepts/error.interceptor';
 import { RequestInterceptor } from '../core/intercepts/request.interceptor'
 
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import {NgxAutoScrollModule} from "ngx-auto-scroll";
+import { ScrollFixService } from './services/scroll-fix.service';
+import { MessageService } from './services/message.service';
 
 const appRoutes: Routes = [
    { path: 'chat/:id', component: ChatRoomComponent, canActivate: [AuthGuardService] },
@@ -54,11 +57,14 @@ const appRoutes: Routes = [
       ReactiveFormsModule,
       FormsModule,
       RouterModule.forRoot(appRoutes),
-      InfiniteScrollModule
+      InfiniteScrollModule,
+      NgxAutoScrollModule
    ],
    providers: [
       WebSocketService,
       AuthService,
+      ScrollFixService,
+      MessageService,
       {
          provide: HTTP_INTERCEPTORS,
          useClass: RequestInterceptor,

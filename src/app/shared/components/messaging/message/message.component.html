@@ -1,7 +1,6 @@
 
 
-<<<<<<< HEAD
-<div *ngIf="message" class="d-flex justify-content-start mb-4 ">
+<div *ngIf="message && sentByUser" class="d-flex justify-content-start mb-4 ">
   <div class="d-flex align-items-center">
     <div class="img-container">
       <img src={{imagePath}}/>
@@ -12,7 +11,7 @@
     </div>
   </div>
 </div>
-<!-- <div *ngIf="message" class="d-flex justify-content-end mb-4 ">
+<div *ngIf="message && !sentByUser" class="d-flex justify-content-end mb-4 ">
   <div class="d-flex align-items-center">
     <div class="msg-container-sent">
       {{message.content}}
@@ -21,23 +20,5 @@
     <div class="img-container">
       <img src={{imagePath}}/>
     </div>
-=======
-<div *ngIf="fromCurrentUser" class="d-flex justify-content-start mb-4 ">
-  <div class="img-container">
-    <img src={{imagePath}}/>
-  </div>
-  <div class="msg-container black">
-    {{content}}
-    <span class="msg-time">{{timeSent | date:'short'}}</span>
   </div>
 </div>
-<div *ngIf="!fromCurrentUser" class="d-flex justify-content-end mb-4 ">
-  <div class="msg-container-sent white">
-    {{content}}
-    <span class="msg-time">{{timeSent | date:'short'}}</span>
-  </div>
-  <div class="img-container">
-    <img src={{imagePath}}/>
->>>>>>> 6fd6f951245f877b5662a0707e1786d3f38723f6
-  </div>
-</div> -->

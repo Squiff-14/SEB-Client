@@ -26,7 +26,7 @@ export class WebSocketService {
       const dataPacket: DataPacket = JSON.parse(event.data);
       
       const message: Message = {
-        message: null,
+        message: dataPacket.eventData.messageId,
         user: dataPacket.eventData.senderId,
         sentAt: dataPacket.eventData.timestamp,
         content: dataPacket.eventData.content

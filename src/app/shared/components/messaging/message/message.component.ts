@@ -1,3 +1,4 @@
+import { AuthService } from './../../../../core/services/auth.service';
 import { Message } from './../../../../core/models/message';
 import { DataPacket } from 'src/app/core/models/data-packet';
 import { Component, OnInit, Input } from '@angular/core';
@@ -8,9 +9,9 @@ import * as moment from 'moment';
   templateUrl: './message.component.html',
   styleUrls: ['./message.component.css']
 })
-export class MessageComponent implements OnInit{
+export class MessageComponent implements OnInit {
 
-  private fromCurrentUser: boolean
+  private sentByUser: boolean
   private content: String;
   private timeSent: Date;
 
@@ -18,10 +19,11 @@ export class MessageComponent implements OnInit{
   @Input() message: Message;
 
 
-  constructor() {}
+  constructor(private authService: AuthService) { }
 
   ngOnInit() {
-      this.timeSent = this.message.sentAt;
+    this.sentByUser = this.message.user == this.authService.currentUser()
+    this.timeSent = this.message.sentAt;
   }
 
 }
