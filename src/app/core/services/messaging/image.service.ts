@@ -15,22 +15,11 @@ export class ImageService {
   public uploadImage(messageId: string, image: any, roomId: number) {
     const fd = new FormData();
     fd.append('image', image, image.name);
-    
-    this.http.post(`/Image/${roomId}`, fd).subscribe({
-      next: data => this.wsService.send({
-        eventType: "on-image",
-        eventData: {
-          messageId: messageId,
-          senderId: this.authService.currentUser().userId,
-          roomId: roomId,
-          content: data,
-          timestamp: null,
-          username: this.authService.currentUser().username,
-        }
-      }),
-      error: err => console.log(err)
-    });
+    return this.http.post(`/Image/${roomId}/${messageId}`, fd)
+  }
 
+  public getImage(messageUrl: string) {
+    return this.http.get(`/Image`, { params: { imagePath: messageUrl }, responseType: 'blob' });
   }
 
 }

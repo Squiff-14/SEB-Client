@@ -28,7 +28,7 @@ export class WebSocketService {
       
       var type;
       if(dataPacket.eventType == 'on-message'){
-        type = MessageType.image;
+        type = MessageType.message;
       }
       else if(dataPacket.eventType == 'on-image'){
         type = MessageType.image
@@ -42,6 +42,8 @@ export class WebSocketService {
         user: {
           userId: dataPacket.eventData.senderId,
           username: dataPacket.eventData.username
+
+          
         }
       }
 

@@ -60,3 +60,14 @@
     font-size: 10px;
     min-width: 200px;
 }
+
+.img-container{
+    background-color: #F47D4A;
+    border-radius: 25px;
+}
+
+.img-chat {
+ height:  100%;
+ width: 100%;
+ border-radius: 25px;
+}

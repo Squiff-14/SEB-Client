@@ -49,4 +49,12 @@ export class AuthService {
     return this.isLoggedInSubject.asObservable();
   }
 
+  public getToken(){
+    const token = JSON.stringify(localStorage.getItem('token'))
+    if(token){
+      return token
+    }
+    this.logout();
+  }
+
 }

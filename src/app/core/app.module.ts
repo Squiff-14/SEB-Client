@@ -29,6 +29,7 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import {NgxAutoScrollModule} from "ngx-auto-scroll";
 import { ScrollFixService } from './services/scroll-bar/scroll-fix.service';
 import { MessageService } from './services/messaging/message.service';
+import { ImagePipe } from './pipes/image-pipe';
 
 const appRoutes: Routes = [
    { path: 'chat/:id', component: ChatRoomComponent, canActivate: [AuthGuardService] },
@@ -51,6 +52,7 @@ const appRoutes: Routes = [
       PageNotFoundComponent,
       NavComponent,
       LoginComponent,
+      ImagePipe
    ],
    imports: [
       BrowserModule,
