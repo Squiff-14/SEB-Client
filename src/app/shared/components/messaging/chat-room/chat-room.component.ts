@@ -58,7 +58,6 @@ export class ChatRoomComponent implements OnDestroy, OnInit {
         var messageId = Guid.create().toString();
         this.messageService.getMessageHistory(this.roomId, new Date().toISOString()).subscribe({
             next: async (res) => {
-                console.log(...res.history)
                 this.messages.push(...res.history)
                 if (this.messages.length == 0) {
                     this.messages.push({
@@ -131,17 +130,20 @@ export class ChatRoomComponent implements OnDestroy, OnInit {
 
     onFileSelected(event) {
         var messageId = Guid.create().toString()
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            console.log(reader);
+            this.messages.push({
+                type: MessageType.image,
+                message: messageId,
+                user: this.authService.currentUser(),
+                sentAt: null,
+                content: reader.result,
+            });
+        }
+        reader.readAsDataURL(event.target.files[0])
         this.imgService.uploadImage(messageId, event.target.files[0], this.roomId).subscribe({
-            next: res => {
-                this.messages.push({
-                    type: MessageType.image,
-                    message: messageId,
-                    user: this.authService.currentUser(),
-                    sentAt: null,
-                    content: res, // loading image or anything
-                })
-            },
-            error: err =>  console.log(err)
+            error: err => console.log(err)
         });
     }
 

@@ -1,3 +1,4 @@
+
 <div *ngIf="message.type == 0  && sentByUser" class="d-flex justify-content-start mb-4 ">
   <div class="d-flex align-items-center pb-3">
     <div class="img-container">
@@ -27,14 +28,29 @@
   </div>
 </div>
 
-<div *ngIf="message && message.type == 1" class="d-flex justify-content-start mb-4 ">
-  <span class="">{{message.user.username}}</span>
-  <div class="p-3 img-container">
-    <a>
-      <img class="img-chat" [src]="message.content| authImage | async"/>
-    </a>
+<div *ngIf="message.type == 1 && sentByUser" class="d-flex justify-content-start mb-4 ">
+  <div class="d-flex align-items-center pb-3">
+    <div class="msg-container">
+      <span class="msg-name">{{message.user.username}}</span>
+      <img class="img-chat" [attr.src]="message.content | authImage | async"/>
+      <span class="msg-time">{{message.sentAt | date:'short'}}</span>
+    </div>
+    <div class="img-container">
+      <img src={{imagePath}} />
+    </div>
   </div>
-  <span class="">{{message.sentAt | date:'short'}}</span>
+</div>
+<div *ngIf="message.type == 1 && !sentByUser" class="d-flex justify-content-end mb-4 ">
+  <div class="d-flex align-items-center pb-3">
+    <div class="msg-container-sent">
+      <span class="msg-name-sent">{{message.user.username}}</span>
+      <img class="img-chat" [attr.src]="message.content | authImage | async"/>
+      <span class="msg-time-sent">{{message.sentAt | date:'short'}}</span>
+    </div>
+    <div class="img-container">
+      <img src={{imagePath}} />
+    </div>
+  </div>
 </div>
 
 <!-- ng if video sent -->
