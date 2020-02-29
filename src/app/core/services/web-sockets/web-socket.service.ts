@@ -1,9 +1,10 @@
-import { AuthService } from './auth.service';
+import { AuthService } from '../authentication/auth.service';
 import { DataPacket } from 'src/app/core/models/data-packet';
 import { Injectable } from '@angular/core';
-import { Observable, observable, Subject } from 'rxjs';
-import decode from 'jwt-decode';
-import { Message } from '../models/message';
+import { Subject } from 'rxjs';
+import { Message } from '../../models/message';
+import { MessageType } from '../../models/enums/MessageType';
+
 
 @Injectable({
   providedIn: 'root'
@@ -17,47 +18,63 @@ export class WebSocketService {
     this.recivedMessages = new Subject<Message>();
   }
 
-  create(url: string) {
+  public create(url: string) {
     this.ws = new WebSocket(url)
     this.ws.onopen = () => console.log("Client Connected");
     this.ws.onclose = () => console.log("Client Disconencted");
     this.ws.onmessage = (event: any) => {
-      
+
       const dataPacket: DataPacket = JSON.parse(event.data);
       
+      var type;
+      if(dataPacket.eventType == 'on-message'){
+        type = MessageType.image;
+      }
+      else if(dataPacket.eventType == 'on-image'){
+        type = MessageType.image
+      }
+
       const message: Message = {
+        type: type,
         message: dataPacket.eventData.messageId,
-        user: dataPacket.eventData.senderId,
         sentAt: dataPacket.eventData.timestamp,
-        content: dataPacket.eventData.content
-      } 
-      this.recivedMessages.next(message); 
+        content: dataPacket.eventData.content,
+        user: {
+          userId: dataPacket.eventData.senderId,
+          username: dataPacket.eventData.username
+        }
+      }
+
+      this.recivedMessages.next(message);
     };
     this.ws.onerror = (event) => console.log(event);
   }
 
-  send(dataPacket: DataPacket) {
+  public send(dataPacket: DataPacket) {
     var setTimeoutId = setTimeout(() => {
       try {
         if (this.ws.readyState === WebSocket.OPEN) {
           this.ws.send(JSON.stringify(dataPacket));
-          console.log(`Sent to server ${JSON.stringify(dataPacket)}`);
           clearTimeout(setTimeoutId);
         }
       }
       catch (err) {
-        console.log("connection not established");
-        console.log(err);
+        console.error("connection not established");
+        console.error(err);
       }
     }, 100)
   }
 
-  close() {
+  public close() {
     this.ws.close(1000, 'The user disconnected')
   }
 
-  receivedMessages() {
+  public receivedMessages() {
     return this.recivedMessages.asObservable();
+  }
+
+  public isReady(): boolean {
+    return this.ws.readyState == WebSocket.OPEN
   }
 
 }

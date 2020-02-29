@@ -1,7 +1,7 @@
-import { WebSocketService } from './web-socket.service';
+import { User } from './../../models/User';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import decode from 'jwt-decode';
 
@@ -37,8 +37,12 @@ export class AuthService {
     return true;
   }
 
-  public currentUser(): number {
-    return +decode(localStorage.getItem('token')).nameid;
+  public currentUser(): User {
+    var jwt = decode(localStorage.getItem('token'));
+    return {
+      userId: +jwt.nameid,
+      username: jwt.unique_name
+    }
   }
 
   public isLoggedIn() {

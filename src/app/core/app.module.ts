@@ -1,3 +1,4 @@
+import { ImageService } from './services/messaging/image.service';
 
 
 
@@ -18,16 +19,16 @@ import { ChatRoomComponent } from '../shared/components/messaging/chat-room/chat
 import { PageNotFoundComponent } from '../shared/layout/page-not-found/page-not-found.component';
 import { MessageComponent } from './../shared/components/messaging/message/message.component';
 
-import { AuthService } from './services/auth.service';
+import { AuthService } from './services/authentication/auth.service';
 import { AuthGuardService } from './guards/auth-guard.service';
-import { WebSocketService } from '../core/services/web-socket.service';
+import { WebSocketService } from './services/web-sockets/web-socket.service';
 import { ErrorInterceptor } from './intercepts/error.interceptor';
 import { RequestInterceptor } from '../core/intercepts/request.interceptor'
 
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import {NgxAutoScrollModule} from "ngx-auto-scroll";
-import { ScrollFixService } from './services/scroll-fix.service';
-import { MessageService } from './services/message.service';
+import { ScrollFixService } from './services/scroll-bar/scroll-fix.service';
+import { MessageService } from './services/messaging/message.service';
 
 const appRoutes: Routes = [
    { path: 'chat/:id', component: ChatRoomComponent, canActivate: [AuthGuardService] },
@@ -65,6 +66,7 @@ const appRoutes: Routes = [
       AuthService,
       ScrollFixService,
       MessageService,
+      ImageService,
       {
          provide: HTTP_INTERCEPTORS,
          useClass: RequestInterceptor,

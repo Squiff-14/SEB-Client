@@ -17,7 +17,7 @@
           </button>
           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <li *ngFor="let room of rooms">
-              <a class="dropdown-item" href="chat/{{room.roomId}}">{{room.name}}</a>
+              <a class="dropdown-item" routerLink="/chat/{{room.roomId}}">{{room.name}}</a>
             </li>
           </div>
         </div>

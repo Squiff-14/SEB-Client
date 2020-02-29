@@ -1,4 +1,3 @@
-import { Guid } from 'guid-typescript';
 
 export interface DataPacket { 
     eventType: string;
@@ -6,9 +5,8 @@ export interface DataPacket {
         messageId: string;
         senderId: number;
         roomId: number;
-        content: string;
+        content: any;
         timestamp: Date;
         username: string;
-        fromCurrentUser: boolean;
     }
 }

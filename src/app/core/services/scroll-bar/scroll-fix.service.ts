@@ -21,7 +21,6 @@ export class ScrollFixService {
 
   restore(): void {
     if (this.toReset) {
-      console.log("restore");
       if (this.readyFor === 'up') {
         this.node.scrollTop = this.node.scrollHeight - this.previousScrollHeightMinusTop;
       }

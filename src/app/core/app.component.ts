@@ -1,7 +1,6 @@
-import { WebSocketService } from './services/web-socket.service';
-import { Component, OnDestroy, OnInit } from '@angular/core';;
-
-import { AuthService } from './services/auth.service';
+import { WebSocketService } from './services/web-sockets/web-socket.service';
+import { Component } from '@angular/core';;
+import { AuthService } from './services/authentication/auth.service';
 
 @Component({
   selector: 'app-root',

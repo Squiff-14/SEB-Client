@@ -1,8 +1,8 @@
-import { RoomService } from '../../../../core/services/room.service';
+import { RoomService } from '../../../../core/services/rooms/room.service';
 import { DataPacket } from '../../../../core/models/data-packet'
 import { timestamp } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { WebSocketService } from '../../../../core/services/web-socket.service';
+import { WebSocketService } from '../../../../core/services/web-sockets/web-socket.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 
@@ -16,7 +16,7 @@ export class JoinRoomComponent implements OnInit {
   private roomForm: FormGroup;
   private invalidForm: boolean;
   private selectedRoom: string;
-  private rooms;
+  private rooms = [];
 
   constructor(private roomService: RoomService, private router: Router,
     private fb: FormBuilder) {
@@ -30,7 +30,7 @@ export class JoinRoomComponent implements OnInit {
 
     this.roomService.getRooms()
     .subscribe(data => {
-      this.rooms = data.rooms;
+      this.rooms = data;
     });
   }
 

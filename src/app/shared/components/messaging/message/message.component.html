@@ -1,20 +1,26 @@
 
 
 <div *ngIf="message && sentByUser" class="d-flex justify-content-start mb-4 ">
-  <div class="d-flex align-items-center">
+  <div class="d-flex align-items-center pb-3">
     <div class="img-container">
       <img src={{imagePath}}/>
     </div>
     <div class="msg-container">
-      {{message.content}}
-      <span class="msg-time">{{timeSent | date:'short'}}</span>
+      <span class="msg-name">{{message.user.username}}</span>
+      <diV class="text-break">
+        {{message.content}}
+      </diV>
+      <span class="msg-time">{{message.sentAt | date:'short'}}</span>
     </div>
   </div>
 </div>
 <div *ngIf="message && !sentByUser" class="d-flex justify-content-end mb-4 ">
-  <div class="d-flex align-items-center">
+  <div class="d-flex align-items-center pb-3">
     <div class="msg-container-sent">
-      {{message.content}}
+      <span class="msg-name-sent">{{message.user.username}}</span>
+      <diV class="text-break">
+        {{message.content}}
+      </diV>
       <span class="msg-time-sent">{{message.sentAt | date:'short'}}</span>
     </div>
     <div class="img-container">
@@ -22,3 +28,6 @@
     </div>
   </div>
 </div>
+
+<!-- ng if video sent -->
+<!-- ng if vdieo received -->

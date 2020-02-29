@@ -1,6 +1,10 @@
+import { User } from './User';
+import { MessageType } from './enums/MessageType';
+
 export interface Message {
+    type: MessageType;
     message: string;
-    user: number;
     sentAt: Date;
-    content: string;
+    content: any;
+    user: User;
 }
