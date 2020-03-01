@@ -12,43 +12,19 @@ import { MessageType } from '../../models/enums/MessageType';
 export class WebSocketService {
 
   private ws: WebSocket;
-  private recivedMessages: Subject<Message>;
+  private receivedDataPackets: Subject<DataPacket>;
 
   constructor(private authService: AuthService) {
-    this.recivedMessages = new Subject<Message>();
+    this.receivedDataPackets = new Subject<DataPacket>();
   }
 
   public create(url: string) {
     this.ws = new WebSocket(url)
     this.ws.onopen = () => console.log("Client Connected");
-    this.ws.onclose = () => console.log("Client Disconencted");
-    this.ws.onmessage = (event: any) => {
-
-      const dataPacket: DataPacket = JSON.parse(event.data);
-      
-      var type;
-      if(dataPacket.eventType == 'on-message'){
-        type = MessageType.message;
-      }
-      else if(dataPacket.eventType == 'on-image'){
-        type = MessageType.image
-      }
-
-      const message: Message = {
-        type: type,
-        message: dataPacket.eventData.messageId,
-        sentAt: dataPacket.eventData.timestamp,
-        content: dataPacket.eventData.content,
-        user: {
-          userId: dataPacket.eventData.senderId,
-          username: dataPacket.eventData.username
-
-          
-        }
-      }
-
-      this.recivedMessages.next(message);
+    this.ws.onclose = () => {
+      console.log("Client Disconencted")
     };
+    this.ws.onmessage = (event: any) => this.receivedDataPackets.next(JSON.parse(event.data));
     this.ws.onerror = (event) => console.log(event);
   }
 
@@ -71,8 +47,8 @@ export class WebSocketService {
     this.ws.close(1000, 'The user disconnected')
   }
 
-  public receivedMessages() {
-    return this.recivedMessages.asObservable();
+  public dataPackets() {
+    return this.receivedDataPackets.asObservable();
   }
 
   public isReady(): boolean {

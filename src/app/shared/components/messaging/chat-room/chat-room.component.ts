@@ -18,7 +18,7 @@ import { MessageType } from 'src/app/core/models/enums/MessageType';
     templateUrl: './chat-room.component.html',
     styleUrls: ['./chat-room.component.css']
 })
-export class ChatRoomComponent implements OnDestroy, OnInit {
+export class ChatRoomComponent implements OnInit {
 
     private user: User;
     private roomId: number;
@@ -38,6 +38,7 @@ export class ChatRoomComponent implements OnDestroy, OnInit {
         private fb: FormBuilder,
         private scrollFix: ScrollFixService) {
         this.user = this.authService.currentUser();
+        this.route.paramMap.subscribe(params => this.roomId = +params.get("id"));
     }
 
     ngAfterViewInit(): void {
@@ -45,21 +46,20 @@ export class ChatRoomComponent implements OnDestroy, OnInit {
     }
 
     ngOnInit(): void {
+
         this.messageForm = this.fb.group({
             messageBox: ['']
         })
 
-        this.route.paramMap.subscribe(params => this.roomId = +params.get("id"));
-        this.wsService.receivedMessages().subscribe({
-            next: data => this.receiveMessage(data),
-            error: err => console.log(err)
-        });
-
         var messageId = Guid.create().toString();
-        this.messageService.getMessageHistory(this.roomId, new Date().toISOString()).subscribe({
+        // Get the message history of the room.
+        this.messageService.getMessageHistory(this.roomId, new Date().toISOString(), 15).subscribe({
             next: async (res) => {
+
+                // Push the message history into the message list
                 this.messages.push(...res.history)
                 if (this.messages.length == 0) {
+                    // Push a message onto the list from the current user (Message has not been sent yet)
                     this.messages.push({
                         type: MessageType.message,
                         message: messageId,
@@ -72,6 +72,18 @@ export class ChatRoomComponent implements OnDestroy, OnInit {
             error: (err) => console.log(err)
         });
 
+        // Subscribe to the rooms stream of messages. 
+        var test = this.messageService.getObservableRoom(this.roomId)
+        console.log("here");
+        test.messages.asObservable().subscribe({
+            next: data => {
+                this.receiveMessage(data)
+            },
+            error: err => console.log(err)
+        });
+        console.log(test);
+
+        // Send a join room event over the established ws connection
         this.wsService.send({
             eventType: "on-room",
             eventData: {
@@ -83,14 +95,16 @@ export class ChatRoomComponent implements OnDestroy, OnInit {
                 username: this.user.username
             }
         });
+
     }
 
     sendMessage() {
+
+        // If the websocket is ready, generate the message and push to list
+        // for initial display
         var message: string = this.messageForm.value.messageBox;
         if (message && this.wsService.isReady()) {
             var messageId = Guid.create().toString();
-
-            // Only push if its the fisrt time joing the room 
             this.messages.push({
                 type: MessageType.message,
                 message: messageId,
@@ -99,6 +113,7 @@ export class ChatRoomComponent implements OnDestroy, OnInit {
                 content: message
             })
 
+            // Create the payload for the websocket and send via the service
             this.wsService.send({
                 eventType: "on-message",
                 eventData: {
@@ -119,6 +134,10 @@ export class ChatRoomComponent implements OnDestroy, OnInit {
     }
 
     receiveMessage(message: Message) {
+
+        // Upon receiving a message via from the observable stream. Check to see if the message
+        // already exsists in the message list. If so it's been sent by the client listening.
+        // So upate with a timestamp to confirm that it has been sent
         let sentMessage = this.messages.findIndex((m) => m.message == message.message);
         if (sentMessage == -1) {
             this.messages.push(message);
@@ -128,11 +147,14 @@ export class ChatRoomComponent implements OnDestroy, OnInit {
 
     }
 
+    // On fileSelected is the event handler for uploading images.
     onFileSelected(event) {
+
+        // The file chosen will be pushed onto the message list using the local
+        // machine file path for the inital src
         var messageId = Guid.create().toString()
         const reader = new FileReader();
         reader.onload = (e) => {
-            console.log(reader);
             this.messages.push({
                 type: MessageType.image,
                 message: messageId,
@@ -141,24 +163,21 @@ export class ChatRoomComponent implements OnDestroy, OnInit {
                 content: reader.result,
             });
         }
+
+        // Images are to large to be sent over websockets even as a base64
+        // The image will be uploaded to the server via HTTP and at the same 
+        // endpoint emit an image url to all sockets in the room to load the new server src
         reader.readAsDataURL(event.target.files[0])
         this.imgService.uploadImage(messageId, event.target.files[0], this.roomId).subscribe({
             error: err => console.log(err)
         });
-    }
 
-    closeSocket(): void {
-        this.wsService.close();
-    }
-
-    ngOnDestroy(): void {
-        this.closeSocket();
     }
 
     onScroll() {
         this.scrollFix.prepareFor('up');
         if (this.messages[0].sentAt) {
-            this.messageService.getMessageHistory(this.roomId, this.messages[0].sentAt).subscribe({
+            this.messageService.getMessageHistory(this.roomId, new Date(this.messages[0].sentAt).toISOString(), 15).subscribe({
                 next: (res) => {
                     this.messages.unshift(...res.history)
                     this.scrollFix.restore();

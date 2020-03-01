@@ -1,4 +1,4 @@
 export class Room {
-    roomId: Number;
-    roomName: String;
+    roomId: number;
+    roomName: string;
 }

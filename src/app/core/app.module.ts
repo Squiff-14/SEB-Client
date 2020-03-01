@@ -1,3 +1,6 @@
+import { RecentChatRoomsComponent } from './../shared/components/messaging/recent-chat-rooms/recent-chat-rooms.component';
+import { ChatRoomPreviewComponent } from './../shared/components/messaging/chat-room-preview/chat-room-preview.component';
+import { UserService } from './services/user/user.service';
 import { ImageService } from './services/messaging/image.service';
 
 
@@ -52,6 +55,8 @@ const appRoutes: Routes = [
       PageNotFoundComponent,
       NavComponent,
       LoginComponent,
+      RecentChatRoomsComponent,
+      ChatRoomPreviewComponent,
       ImagePipe
    ],
    imports: [
@@ -69,6 +74,7 @@ const appRoutes: Routes = [
       ScrollFixService,
       MessageService,
       ImageService,
+      UserService,
       {
          provide: HTTP_INTERCEPTORS,
          useClass: RequestInterceptor,
