@@ -73,16 +73,17 @@ export class ChatRoomComponent implements OnInit {
         });
 
         // Subscribe to the rooms stream of messages. 
-        var test = this.messageService.getObservableRoom(this.roomId)
-        console.log("here");
-        test.messages.asObservable().subscribe({
+        var room = this.messageService.getObservableRoom(this.roomId);
+        room.messages.subscribe({
             next: data => {
                 this.receiveMessage(data)
+                console.log(data);
             },
-            error: err => console.log(err)
+            error: err => {
+                console.error(err);
+            }
         });
-        console.log(test);
-
+    
         // Send a join room event over the established ws connection
         this.wsService.send({
             eventType: "on-room",

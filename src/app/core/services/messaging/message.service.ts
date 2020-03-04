@@ -28,7 +28,7 @@ export class MessageService {
 
         // Find the correct room to emit the newly created message. 
         let roomObservable = this.observableRooms.find(room => room.roomId === packet.eventData.roomId);
-        console.log(roomObservable.messages);
+
         //Convert the dataPacket to a message type and emit on the observable stream
         if (roomObservable) {
           let message = {
@@ -38,7 +38,7 @@ export class MessageService {
             content: packet.eventData.content,
             user: { userId: packet.eventData.senderId, username: packet.eventData.username }
           }
-          console.log(roomObservable.messages.observers);
+          console.log(roomObservable);
           roomObservable.messages.next(message);
         }
       },
@@ -74,7 +74,8 @@ export class MessageService {
       });
     }
     var room = this.observableRooms.find(room => room.roomId == roomId);
-    console.error(room.messages.observers);
+    console.log(room);
+    console.log(room.messages.observers);
     return room;
   }
 

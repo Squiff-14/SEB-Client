@@ -1,3 +1,4 @@
+import { Room } from './../../../../core/models/Room';
 import { SubjectRoom } from './../../../../core/models/subject-room';
 import { Message } from './../../../../core/models/message';
 import { Observable, Subject, concat } from 'rxjs';
@@ -12,28 +13,31 @@ import { Component, OnInit, Input, ɵLocaleDataIndex } from '@angular/core';
 export class ChatRoomPreviewComponent implements OnInit {
 
   message: Message;
-  test: any;
+  messages: Message[];
 
-  @Input() room: SubjectRoom;
+  @Input() room: Room;
 
-  constructor(private messageService: MessageService) {
-
-  }
+  constructor(private messageService: MessageService) {}
 
   ngOnInit() {
+    
     this.messageService.getMessageHistory(this.room.roomId, new Date().toISOString(), 1).subscribe({
-      next: m => this.message = m.history[0],
+      next: m => {
+        this.message = m.history[0]
+      },
       error: err => console.log(err)
     })
 
-    var test = this.messageService.getObservableRoom(this.room.roomId);
-    test.messages.asObservable().subscribe({
+    var room = this.messageService.getObservableRoom(this.room.roomId);
+    room.messages.subscribe({
       next: data => {
-        this.test = data.content;
         this.message = data;
-        console.log(this.message.content);
-      }
-    })
+        console.log(this.message);
+      },
+      error: err => { 
+        console.log(err)
+       }
+    });
 
   }
 
