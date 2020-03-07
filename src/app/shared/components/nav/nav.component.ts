@@ -9,9 +9,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavComponent implements OnInit {
 
-  constructor() { }
+  constructor(private authServcie :AuthService) { }
 
   ngOnInit() {
+  }
+s
+  logout(){
+    this.authServcie.logout();
   }
 
 }

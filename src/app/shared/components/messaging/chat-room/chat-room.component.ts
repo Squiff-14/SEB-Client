@@ -73,8 +73,7 @@ export class ChatRoomComponent implements OnInit {
         });
 
         // Subscribe to the rooms stream of messages. 
-        var room = this.messageService.getObservableRoom(this.roomId);
-        room.messages.subscribe({
+        this.messageService.getObservableRoom(this.roomId).messages.subscribe({
             next: data => {
                 this.receiveMessage(data)
                 console.log(data);
@@ -86,7 +85,7 @@ export class ChatRoomComponent implements OnInit {
     
         // Send a join room event over the established ws connection
         this.wsService.send({
-            eventType: "on-room",
+            eventType: "on-join-room",
             eventData: {
                 messageId: messageId,
                 senderId: this.user.userId,

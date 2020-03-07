@@ -22,6 +22,17 @@ export class MessageService {
   constructor(private http: HttpClient, private authService: AuthService,
     private wsService: WebSocketService, private userService: UserService) {
 
+      this.userService.getUsersRooms().subscribe({
+        next: res => {
+          res.forEach(room =>
+            this.observableRooms.push({
+              roomId: room.roomId,
+              messages: new Subject<Message>()
+            }))
+        },
+        error: err => console.log(err)
+      });
+
     // React to dataPackets received from the subscription
     this.wsService.dataPackets().subscribe({
       next: packet => {
@@ -32,13 +43,12 @@ export class MessageService {
         //Convert the dataPacket to a message type and emit on the observable stream
         if (roomObservable) {
           let message = {
-            type: (packet.eventType == 'on-room' || packet.eventType == 'on-message') ? MessageType.message : MessageType.image,
+            type: (packet.eventType == 'on-join-room' || packet.eventType == 'on-message') ? MessageType.message : MessageType.image,
             message: packet.eventData.messageId,
             sentAt: packet.eventData.timestamp,
             content: packet.eventData.content,
             user: { userId: packet.eventData.senderId, username: packet.eventData.username }
           }
-          console.log(roomObservable);
           roomObservable.messages.next(message);
         }
       },
@@ -46,26 +56,11 @@ export class MessageService {
     });
   }
 
-  // Return the Object holding all of the observables relating to rooms
-  public async getObservableRooms(): Promise<SubjectRoom[]> {
-    try {
-      let rooms = await this.userService.getUsersRooms().toPromise()
-      rooms.forEach(room =>
-        this.observableRooms.push({
-          roomId: room.roomId,
-          messages: new Subject<Message>()
-        }))
-      return this.observableRooms;
-    } catch (ex) {
-      console.log(ex);
-    }
-  }
-
   // Solution to new room issue
   // If the room does not exist in the object it will be because it has only just been
   // created. 
   // The endpoint to rerieve a users rooms does not yet return the new room because the 
-  // websocket event of "on-room has not yet saved the UserRoom link in the database"
+  // websocket event of "on-join-room has not yet saved the UserRoom link in the database"
   public getObservableRoom(roomId: number) {
     if (!this.observableRooms.find(room => room.roomId == roomId)) {
       this.observableRooms.push({
@@ -74,11 +69,9 @@ export class MessageService {
       });
     }
     var room = this.observableRooms.find(room => room.roomId == roomId);
-    console.log(room);
-    console.log(room.messages.observers);
     return room;
   }
-
+  
   // Retrives all message history for a room since the user joined.
   // Can also be used to load history in chunks with the infinite scroll
   public getMessageHistory(roomId: number, before: any, take: number) {
