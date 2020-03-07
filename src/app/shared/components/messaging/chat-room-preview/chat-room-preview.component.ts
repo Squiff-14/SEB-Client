@@ -1,11 +1,8 @@
+
 import { Room } from './../../../../core/models/Room';
-import { SubjectRoom } from './../../../../core/models/subject-room';
 import { Message } from './../../../../core/models/message';
-import { Observable, Subject, concat } from 'rxjs';
 import { MessageService } from './../../../../core/services/messaging/message.service';
-import { Component, OnInit, Input, ɵLocaleDataIndex } from '@angular/core';
-import { WebSocketService } from 'src/app/core/services/web-sockets/web-socket.service';
-import { Guid } from 'guid-typescript';
+import { Component, OnInit, Input} from '@angular/core';
 
 @Component({
   selector: 'app-chat-room-preview',
@@ -19,21 +16,9 @@ export class ChatRoomPreviewComponent implements OnInit {
 
   @Input() room: Room;
 
-  constructor(private messageService: MessageService, private wsService: WebSocketService) { }
+  constructor(private messageService: MessageService) { }
 
   ngOnInit() {
-
-    this.wsService.send({
-      eventType: "on-link-room",
-      eventData: {
-        messageId: Guid.create().toString(),
-        senderId: 0,
-        roomId: this.room.roomId,
-        content: "",
-        timestamp: new Date(),
-        username: ""
-      }
-    });
 
     this.messageService.getMessageHistory(this.room.roomId, new Date().toISOString(), 1).subscribe({
       next: m => {
@@ -50,5 +35,5 @@ export class ChatRoomPreviewComponent implements OnInit {
     });
 
   }
-
+  
 }

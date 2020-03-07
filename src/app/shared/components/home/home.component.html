@@ -1,3 +1,8 @@
-<div class="d-flex justify-content-center">
-    <app-recent-chat-rooms></app-recent-chat-rooms>
+<div class="container-flex row w-100">
+    <div class="col-2 ml-5 mt-5 pt-2 ">
+        <app-recent-chat-rooms (roomEmitter)="onSelectedRoom($event)"></app-recent-chat-rooms>
+    </div>
+    <div class="col-8">
+        <app-chat-room *ngIf="room" [room]="room"></app-chat-room>
+    </div>
 </div>

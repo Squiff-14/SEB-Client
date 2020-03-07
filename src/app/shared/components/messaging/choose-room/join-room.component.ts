@@ -28,7 +28,7 @@ export class JoinRoomComponent implements OnInit {
       roomName: ['', Validators.required]
     });
 
-    this.roomService.getRooms()
+    this.roomService.getAllRooms()
     .subscribe(data => {
       this.rooms = data;
     });

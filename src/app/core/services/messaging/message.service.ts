@@ -1,8 +1,8 @@
+import { RoomService } from './../rooms/room.service';
 import { MessageType } from './../../models/enums/MessageType';
 import { Message } from './../../models/message';
 import { DataPacket } from './../../models/data-packet';
 import { SubjectRoom } from '../../models/subject-room';
-import { UserService } from './../user/user.service';
 import { WebSocketService } from './../web-sockets/web-socket.service';
 import { User } from 'src/app/core/models/User';
 import { MessageHistory } from '../../models/message-history';
@@ -20,9 +20,9 @@ export class MessageService {
   private observableRooms: SubjectRoom[] = [];
 
   constructor(private http: HttpClient, private authService: AuthService,
-    private wsService: WebSocketService, private userService: UserService) {
+    private wsService: WebSocketService, private roomService: RoomService) {
 
-      this.userService.getUsersRooms().subscribe({
+      this.roomService.getRooms("").subscribe({
         next: res => {
           res.forEach(room =>
             this.observableRooms.push({

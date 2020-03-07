@@ -1,10 +1,9 @@
+import { RoomService } from './../rooms/room.service';
 import { AuthService } from '../authentication/auth.service';
 import { DataPacket } from 'src/app/core/models/data-packet';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { Message } from '../../models/message';
-import { MessageType } from '../../models/enums/MessageType';
-
+import { Guid } from 'guid-typescript';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +13,7 @@ export class WebSocketService {
   private ws: WebSocket;
   private receivedDataPackets: Subject<DataPacket>;
 
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService, private roomService: RoomService) {
     this.receivedDataPackets = new Subject<DataPacket>();
   }
 
@@ -43,17 +42,38 @@ export class WebSocketService {
     }, 100)
   }
 
-  public close() {
-    this.ws.close(1000, 'The user disconnected')
+  public connectToRooms() {
+    this.roomService.getRooms("").subscribe({
+      next: res => {
+        res.forEach((room) => {
+          this.send({
+            eventType: "on-link-room",
+            eventData: {
+              messageId: Guid.create().toString(),
+              senderId: 0,
+              roomId: room.roomId,
+              content: "",
+              timestamp: new Date(),
+              username: ""
+            }
+          });
+        });
+      },
+      error: err => console.log(err)
+    });
   }
+
+  public close() {
+      this.ws.close(1000, 'The user disconnected')
+    }
 
   public dataPackets() {
-    return this.receivedDataPackets.asObservable();
-  }
+      return this.receivedDataPackets.asObservable();
+    }
 
   public isReady(): boolean {
-    return this.ws.readyState == WebSocket.OPEN
-  }
+      return this.ws.readyState == WebSocket.OPEN
+    }
 
 }
 

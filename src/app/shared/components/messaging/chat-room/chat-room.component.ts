@@ -1,3 +1,4 @@
+import { Room } from './../../../../core/models/Room';
 import { ImageService } from './../../../../core/services/messaging/image.service';
 import { User } from './../../../../core/models/User';
 import { Message } from './../../../../core/models/message';
@@ -5,7 +6,7 @@ import { ScrollFixService } from '../../../../core/services/scroll-bar/scroll-fi
 import { MessageService } from '../../../../core/services/messaging/message.service';
 import { AuthService } from '../../../../core/services/authentication/auth.service';
 import { WebSocketService } from '../../../../core/services/web-sockets/web-socket.service';
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Input } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Guid } from "guid-typescript";
@@ -21,11 +22,12 @@ import { MessageType } from 'src/app/core/models/enums/MessageType';
 export class ChatRoomComponent implements OnInit {
 
     private user: User;
-    private roomId: number;
     private messages: Message[] = [];
     private messageForm: FormGroup;
     private connectionLost: boolean = false;
     private selectedFile = null;
+
+    @Input() room: Room;
 
     @ViewChild('scrollBar', { static: true }) scrollBar: ElementRef;
 
@@ -38,7 +40,11 @@ export class ChatRoomComponent implements OnInit {
         private fb: FormBuilder,
         private scrollFix: ScrollFixService) {
         this.user = this.authService.currentUser();
-        this.route.paramMap.subscribe(params => this.roomId = +params.get("id"));
+    }
+
+    ngOnChanges(changes) {
+        console.log(changes)
+        this.ngOnInit();
     }
 
     ngAfterViewInit(): void {
@@ -46,14 +52,15 @@ export class ChatRoomComponent implements OnInit {
     }
 
     ngOnInit(): void {
-
+        console.log(this.room);
+        
         this.messageForm = this.fb.group({
             messageBox: ['']
         })
 
         var messageId = Guid.create().toString();
         // Get the message history of the room.
-        this.messageService.getMessageHistory(this.roomId, new Date().toISOString(), 15).subscribe({
+        this.messageService.getMessageHistory(this.room.roomId, new Date().toISOString(), 15).subscribe({
             next: async (res) => {
 
                 // Push the message history into the message list
@@ -73,7 +80,7 @@ export class ChatRoomComponent implements OnInit {
         });
 
         // Subscribe to the rooms stream of messages. 
-        this.messageService.getObservableRoom(this.roomId).messages.subscribe({
+        this.messageService.getObservableRoom(this.room.roomId).messages.subscribe({
             next: data => {
                 this.receiveMessage(data)
                 console.log(data);
@@ -82,19 +89,19 @@ export class ChatRoomComponent implements OnInit {
                 console.error(err);
             }
         });
-    
+
         // Send a join room event over the established ws connection
-        this.wsService.send({
-            eventType: "on-join-room",
-            eventData: {
-                messageId: messageId,
-                senderId: this.user.userId,
-                roomId: this.roomId,
-                content: "Joined the room.",
-                timestamp: new Date(),
-                username: this.user.username
-            }
-        });
+        // this.wsService.send({
+        //     eventType: "on-join-room",
+        //     eventData: {
+        //         messageId: messageId,
+        //         senderId: this.user.userId,
+        //         roomId: this.room.roomId,
+        //         content: "Joined the room.",
+        //         timestamp: new Date(),
+        //         username: this.user.username
+        //     }
+        // });
 
     }
 
@@ -119,7 +126,7 @@ export class ChatRoomComponent implements OnInit {
                 eventData: {
                     messageId: messageId,
                     senderId: this.user.userId,
-                    roomId: this.roomId,
+                    roomId: this.room.roomId,
                     content: message,
                     timestamp: new Date(),
                     username: this.user.username
@@ -168,7 +175,7 @@ export class ChatRoomComponent implements OnInit {
         // The image will be uploaded to the server via HTTP and at the same 
         // endpoint emit an image url to all sockets in the room to load the new server src
         reader.readAsDataURL(event.target.files[0])
-        this.imgService.uploadImage(messageId, event.target.files[0], this.roomId).subscribe({
+        this.imgService.uploadImage(messageId, event.target.files[0], this.room.roomId).subscribe({
             error: err => console.log(err)
         });
 
@@ -177,7 +184,7 @@ export class ChatRoomComponent implements OnInit {
     onScroll() {
         this.scrollFix.prepareFor('up');
         if (this.messages[0].sentAt) {
-            this.messageService.getMessageHistory(this.roomId, new Date(this.messages[0].sentAt).toISOString(), 15).subscribe({
+            this.messageService.getMessageHistory(this.room.roomId, new Date(this.messages[0].sentAt).toISOString(), 15).subscribe({
                 next: (res) => {
                     this.messages.unshift(...res.history)
                     this.scrollFix.restore();

@@ -1,5 +1,4 @@
 import { Message } from './../../models/message';
-import { UserService } from './../user/user.service';
 import { Observable, Subject, observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -13,13 +12,21 @@ export class RoomService {
 
   constructor(private http: HttpClient) {}
 
-  getRooms(): Observable<any> {
-    return this.http.get<Room[]>("/Room");
-  }
-
   create(roomName: string): Observable<any> {
     var createdBy: string = decode(localStorage.getItem('token')).nameid;
     return this.http.post("/Room", { roomName, createdBy });
+  }
+
+  public getRooms(roomSearch: string) {
+    return this.http.get<Room[]>('/Room', { params: { roomSearch: roomSearch } });
+  }
+
+  public getAllRooms(){
+    return this.http.get<Room[]>('/Room/all');
+  }
+
+  public getLatestRoom(){
+    return this.http.get<Room>('/Room/latest');
   }
 
 }
