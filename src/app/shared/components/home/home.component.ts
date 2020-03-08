@@ -12,7 +12,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  private room: Room
+  room: Room
 
   constructor(private wsService: WebSocketService, private roomService: RoomService) {
     wsService.connectToRooms();

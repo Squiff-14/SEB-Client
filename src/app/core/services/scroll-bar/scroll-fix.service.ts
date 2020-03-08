@@ -4,8 +4,7 @@ import { Injectable, OnInit } from '@angular/core';
   providedIn: 'root'
 })
 export class ScrollFixService {
-
-
+  
   node;
   previousScrollHeightMinusTop: number;
   readyFor: string;

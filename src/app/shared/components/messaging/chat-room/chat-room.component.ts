@@ -21,10 +21,10 @@ import { MessageType } from 'src/app/core/models/enums/MessageType';
 })
 export class ChatRoomComponent implements OnInit {
 
+    messages: Message[] = [];
+    messageForm: FormGroup;
+    connectionLost: boolean = false;
     private user: User;
-    private messages: Message[] = [];
-    private messageForm: FormGroup;
-    private connectionLost: boolean = false;
     private selectedFile = null;
 
     @Input() room: Room;

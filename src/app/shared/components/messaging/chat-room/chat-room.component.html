@@ -9,7 +9,7 @@
     <div class="w-100 chat-box shadow ">
       <div #scrollBar class="chat-list pl-5 pr-5 pt-5 pb-0 overflow-auto" infiniteScroll [scrollWindow]="false"
         [infiniteScrollUpDistance]="2" [infiniteScrollThrottle]="500" (scrolledUp)="onScroll()" ngx-auto-scroll
-        lock-y-offset="0" observe-attributes>
+        lock-y-offset="20" observe-attributes>
         <div *ngFor='let message of messages'>
           <app-message [message]="message"></app-message>
         </div>

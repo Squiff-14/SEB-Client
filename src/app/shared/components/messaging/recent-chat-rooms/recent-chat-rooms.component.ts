@@ -16,10 +16,10 @@ import { Room } from 'src/app/core/models/Room';
 export class RecentChatRoomsComponent implements OnInit {
 
   @Output() roomEmitter: EventEmitter<Room> = new EventEmitter<Room>();
-  private model: string;
+  
+  model: string;
+  rooms: Room[] = [];
   private modelChanged: Subject<string> = new Subject<string>();
-  private rooms: Room[] = [];
-
 
   constructor(private messageService: MessageService,
     private roomService: RoomService) {

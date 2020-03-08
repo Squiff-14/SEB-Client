@@ -8,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
 
-  private isLoggedIn: boolean;
+  isLoggedIn: boolean;
 
   constructor(private authService: AuthService) {
     this.authService.isLoggedIn().subscribe(result => this.isLoggedIn = result);

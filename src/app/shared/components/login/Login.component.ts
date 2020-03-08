@@ -13,8 +13,8 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
 
-  private invalidDetails: boolean;
-  private loginForm: FormGroup;
+  invalidDetails: boolean;
+  loginForm: FormGroup;
 
   constructor(private fb: FormBuilder, private authService: AuthService,
     private router: Router, private wsService: WebSocketService) {
@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  private onSubmit() {
+  onSubmit() {
     if (this.loginForm.invalid) return;
     var username: string = this.loginForm.value.username;
     var password: string = this.loginForm.value.password;

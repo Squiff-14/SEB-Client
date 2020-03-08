@@ -1,9 +1,7 @@
+
 import { RecentChatRoomsComponent } from './../shared/components/messaging/recent-chat-rooms/recent-chat-rooms.component';
 import { ChatRoomPreviewComponent } from './../shared/components/messaging/chat-room-preview/chat-room-preview.component';
 import { ImageService } from './services/messaging/image.service';
-
-
-
 import { NgModule, Component } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -21,6 +19,7 @@ import { ChatRoomComponent } from '../shared/components/messaging/chat-room/chat
 import { PageNotFoundComponent } from '../shared/layout/page-not-found/page-not-found.component';
 import { MessageComponent } from './../shared/components/messaging/message/message.component';
 
+import { NgxAutoScrollModule } from './services/scroll-bar/auto-scroll/ngx-auto-scroll.module';
 import { AuthService } from './services/authentication/auth.service';
 import { AuthGuardService } from './guards/auth-guard.service';
 import { WebSocketService } from './services/web-sockets/web-socket.service';
@@ -28,7 +27,7 @@ import { ErrorInterceptor } from './intercepts/error.interceptor';
 import { RequestInterceptor } from '../core/intercepts/request.interceptor'
 
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import {NgxAutoScrollModule} from "ngx-auto-scroll";
+
 import { ScrollFixService } from './services/scroll-bar/scroll-fix.service';
 import { MessageService } from './services/messaging/message.service';
 import { ImagePipe } from './pipes/image-pipe';
@@ -71,6 +70,7 @@ const appRoutes: Routes = [
       WebSocketService,
       AuthService,
       ScrollFixService,
+      NgxAutoScrollModule,
       MessageService,
       ImageService,
       {

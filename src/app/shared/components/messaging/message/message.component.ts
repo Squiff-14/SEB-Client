@@ -12,7 +12,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class MessageComponent implements OnInit {
 
-  private sentByUser: boolean;
+  sentByUser: boolean;
   private image: any;
 
   @Input() imagePath: String;

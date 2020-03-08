@@ -13,10 +13,10 @@ import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms'
 })
 export class JoinRoomComponent implements OnInit {
 
-  private roomForm: FormGroup;
-  private invalidForm: boolean;
+  invalidForm: boolean;
+  roomForm: FormGroup;
+  rooms = [];
   private selectedRoom: string;
-  private rooms = [];
 
   constructor(private roomService: RoomService, private router: Router,
     private fb: FormBuilder) {

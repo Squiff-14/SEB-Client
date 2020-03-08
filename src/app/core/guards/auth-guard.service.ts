@@ -7,7 +7,7 @@ import { Injectable } from '@angular/core';
 })
 export class AuthGuardService implements CanActivate {
 
-  private isLoggedIn: boolean
+  isLoggedIn: boolean
 
   constructor(private authService: AuthService, private router: Router) {
     this.authService.isLoggedIn().subscribe(result =>  this.isLoggedIn = result);
