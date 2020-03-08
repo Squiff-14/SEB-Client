@@ -44,6 +44,7 @@ export class ChatRoomComponent implements OnInit {
 
     ngOnChanges(changes) {
         console.log(changes)
+        this.messages = [];
         this.ngOnInit();
     }
 
@@ -53,7 +54,7 @@ export class ChatRoomComponent implements OnInit {
 
     ngOnInit(): void {
         console.log(this.room);
-        
+
         this.messageForm = this.fb.group({
             messageBox: ['']
         })
