@@ -1,4 +1,4 @@
-import { environment } from './../../environments/environment.prod';
+import { environment } from './../../environments/environment';
 import { WebSocketService } from './services/web-sockets/web-socket.service';
 import { Component } from '@angular/core';;
 import { AuthService } from './services/authentication/auth.service';
