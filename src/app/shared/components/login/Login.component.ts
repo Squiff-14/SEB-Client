@@ -1,3 +1,4 @@
+import { environment } from './../../../../environments/environment';
 import { WebSocketService } from '../../../core/services/web-sockets/web-socket.service';
 
 import { AuthService } from '../../../core/services/authentication/auth.service';
@@ -35,7 +36,7 @@ export class LoginComponent implements OnInit {
       this.authService.login(username, password)
         .subscribe(
           data => {
-            this.wsService.create(`ws://localhost:5000`);
+            this.wsService.create(environment.webSocketUrl);
             this.router.navigate(['/'])
           },
           err => {

@@ -1,3 +1,4 @@
+import { environment } from './../../environments/environment.prod';
 import { WebSocketService } from './services/web-sockets/web-socket.service';
 import { Component } from '@angular/core';;
 import { AuthService } from './services/authentication/auth.service';
@@ -16,7 +17,7 @@ export class AppComponent{
 
     //WebSocket connection is re-established upon refresh if the user is logged-in
     if (this.isLoggedIn) {
-      this.wsService.create(`ws://localhost:5000?`);
+      this.wsService.create(environment.webSocketUrl);
     }
 
   }
