@@ -16,7 +16,7 @@ export class HomeComponent implements OnInit {
 
   room: Room
   rooms: Room[] = [];
-  private hasNoRooms: boolean = false;
+  hasNoRooms: boolean = false;
 
   constructor(private wsService: WebSocketService, private roomService: RoomService, private spinner :NgxSpinnerService) {
     wsService.connectToRooms();

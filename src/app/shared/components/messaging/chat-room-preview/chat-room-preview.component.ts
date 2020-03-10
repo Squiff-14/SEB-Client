@@ -14,8 +14,7 @@ export class ChatRoomPreviewComponent implements OnInit {
 
   message: Message;
   messages: Message[];
-
-  private content: string;
+  content: string;
 
   @Input() room: Room;
 

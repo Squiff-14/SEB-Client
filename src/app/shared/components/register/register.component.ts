@@ -13,7 +13,7 @@ export class RegisterComponent implements OnInit {
 
   invalidDetails: boolean;
   registerForm: FormGroup;
-  private errMessage: string;
+  errMessage: string;
 
   constructor(private fb: FormBuilder, private authService: AuthService,
     private router: Router) {
