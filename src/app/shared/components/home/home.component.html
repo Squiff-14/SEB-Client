@@ -1,6 +1,11 @@
+
+<ngx-spinner></ngx-spinner>
 <div class="container-flex row w-100">
+    <div *ngIf="hasNoRooms" class="col-12 d-flex justify-content-center m-5 p-5">
+        <h2>You aren't in any rooms, please join a room</h2>
+    </div>
     <div class="col-2 ml-5 mt-5 pt-2 ">
-        <app-recent-chat-rooms (roomEmitter)="onSelectedRoom($event)"></app-recent-chat-rooms>
+        <app-recent-chat-rooms *ngIf="rooms" [rooms]="rooms" (roomEmitter)="onSelectedRoom($event)"></app-recent-chat-rooms>
     </div>
     <div class="col-8">
         <app-chat-room *ngIf="room" [room]="room"></app-chat-room>

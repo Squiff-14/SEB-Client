@@ -1,10 +1,12 @@
+import { WebSocketService } from 'src/app/core/services/web-sockets/web-socket.service';
 import { Router, Route } from '@angular/router';
 import { User } from './../../models/User';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import decode from 'jwt-decode';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +14,7 @@ import decode from 'jwt-decode';
 export class AuthService {
 
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private wsService: WebSocketService) { }
 
   private isLoggedInSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.hasToken());
 
@@ -27,8 +29,8 @@ export class AuthService {
 
   public logout() {
     localStorage.removeItem('token');
+    this.wsService.close();
     this.isLoggedInSubject.next(false);
-    this.router.navigate['/login']
   }
 
   public hasToken(): boolean {
@@ -40,20 +42,28 @@ export class AuthService {
   }
 
   public currentUser(): User {
-    var jwt = decode(localStorage.getItem('token'));
-    return {
-      userId: +jwt.nameid,
-      username: jwt.unique_name
+    if (localStorage.getItem('token')) {
+      var jwt = decode(localStorage.getItem('token'));
+      return {
+        userId: +jwt.nameid,
+        username: jwt.unique_name
+      }
+    } else{
+      return null;
     }
   }
 
-  public isLoggedIn() {
+  public register(newUser: any): Observable<any> {
+    return this.http.post('/Authentication/register', newUser);
+  }
+
+  public isLoggedIn(): Observable<boolean> {
     return this.isLoggedInSubject.asObservable();
   }
 
-  public getToken(){
+  public getToken() {
     const token = JSON.stringify(localStorage.getItem('token'))
-    if(token){
+    if (token) {
       return token
     }
     this.logout();

@@ -3,7 +3,7 @@ import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { RoomService } from './../../../../core/services/rooms/room.service';
 import { MessageService } from './../../../../core/services/messaging/message.service';
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { Room } from 'src/app/core/models/Room';
 
 
@@ -15,10 +15,10 @@ import { Room } from 'src/app/core/models/Room';
 })
 export class RecentChatRoomsComponent implements OnInit {
 
+  @Input() rooms: Room []; 
   @Output() roomEmitter: EventEmitter<Room> = new EventEmitter<Room>();
-  
   model: string;
-  rooms: Room[] = [];
+ 
   private modelChanged: Subject<string> = new Subject<string>();
 
   constructor(private messageService: MessageService,

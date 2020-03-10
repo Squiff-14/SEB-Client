@@ -8,7 +8,7 @@ import { AuthService } from './services/authentication/auth.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent{
+export class AppComponent {
 
   private isLoggedIn: boolean;
 
@@ -17,7 +17,7 @@ export class AppComponent{
 
     //WebSocket connection is re-established upon refresh if the user is logged-in
     if (this.isLoggedIn) {
-      // this.wsService.create(environment.webSocketUrl);
+      this.wsService.create(environment.webSocketUrl);
     }
 
   }

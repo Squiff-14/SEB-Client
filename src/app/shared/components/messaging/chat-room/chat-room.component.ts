@@ -77,18 +77,7 @@ export class ChatRoomComponent implements OnInit {
             }
         });
 
-        // Send a join room event over the established ws connection
-        // this.wsService.send({
-        //     eventType: "on-join-room",
-        //     eventData: {
-        //         messageId: messageId,
-        //         senderId: this.user.userId,
-        //         roomId: this.room.roomId,
-        //         content: "Joined the room.",
-        //         timestamp: new Date(),
-        //         username: this.user.username
-        //     }
-        // });
+
 
     }
 

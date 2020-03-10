@@ -1,8 +1,9 @@
+import { RegisterComponent } from './../shared/components/register/register.component';
 
 import { RecentChatRoomsComponent } from './../shared/components/messaging/recent-chat-rooms/recent-chat-rooms.component';
 import { ChatRoomPreviewComponent } from './../shared/components/messaging/chat-room-preview/chat-room-preview.component';
 import { ImageService } from './services/messaging/image.service';
-import { NgModule, Component } from '@angular/core';
+import { NgModule, Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Routes, RouterModule } from '@angular/router';
@@ -27,17 +28,22 @@ import { ErrorInterceptor } from './intercepts/error.interceptor';
 import { RequestInterceptor } from '../core/intercepts/request.interceptor'
 
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgxSpinnerModule } from "ngx-spinner";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+
 
 import { ScrollFixService } from './services/scroll-bar/scroll-fix.service';
 import { MessageService } from './services/messaging/message.service';
 import { ImagePipe } from './pipes/image-pipe';
 
 const appRoutes: Routes = [
-   { path: 'chat/:id', component: ChatRoomComponent, canActivate: [AuthGuardService] },
    { path: 'room', component: JoinRoomComponent, canActivate: [AuthGuardService] },
    { path: 'login', component: LoginComponent },
-   { path: 'home', component: HomeComponent, canActivate: [AuthGuardService] },
-   { path: '', redirectTo: '/home', pathMatch: 'full' },
+   { path: 'register', component: RegisterComponent },
+   { path: 'chat', component: HomeComponent, canActivate: [AuthGuardService] },
+   { path: '', redirectTo: '/chat', pathMatch: 'full' },
    { path: '**', component: PageNotFoundComponent }
 ];
 
@@ -53,6 +59,7 @@ const appRoutes: Routes = [
       PageNotFoundComponent,
       NavComponent,
       LoginComponent,
+      RegisterComponent,
       RecentChatRoomsComponent,
       ChatRoomPreviewComponent,
       ImagePipe
@@ -64,7 +71,10 @@ const appRoutes: Routes = [
       FormsModule,
       RouterModule.forRoot(appRoutes),
       InfiniteScrollModule,
-      NgxAutoScrollModule
+      NgxAutoScrollModule,
+      NgxSpinnerModule,
+      NgbModule,
+      BrowserAnimationsModule
    ],
    providers: [
       WebSocketService,
@@ -86,7 +96,8 @@ const appRoutes: Routes = [
    ],
    bootstrap: [
       AppComponent
-   ]
+   ], 
+   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 
 export class AppModule { }

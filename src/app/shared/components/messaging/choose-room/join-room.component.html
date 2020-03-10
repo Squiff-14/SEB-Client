@@ -1,6 +1,8 @@
+<ngx-spinner></ngx-spinner>
 <div class="container mt-5">
   <div class="d-flex justify-content-center">
-    <div class="alert alert-danger mt-3 mb-3" *ngIf="invalidForm"  ng-reflect-ng-class="alert alert-danger">A new Room must have a name.</div>
+    <div class="alert alert-danger mt-3 mb-3" *ngIf="invalidForm" ng-reflect-ng-class="alert alert-danger">A new Room
+      must have a name.</div>
   </div>
   <div class="d-flex justify-content-center">
     <form class="w-25" [formGroup]="roomForm" (ngSubmit)="onSubmit()">
@@ -9,16 +11,12 @@
         <input class="form-control" formControlName="roomName" placeholder="E.g 'The Cool room'">
       </div>
       <div class="form-group d-flex justify-content-between">
-        <button type="submit" class="btn btn-primary">Create Room</button>
-        <div class="dropdown align-selt-end">
-          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-            Join Room
-          </button>
-          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <li *ngFor="let room of rooms">
-              <a class="dropdown-item" routerLink="/chat/{{room.roomId}}">{{room.name}}</a>
-            </li>
+        <button type="submit" class="btn  btn-outline-dark">Create Room</button>
+        <div *ngIf="rooms.length > 0" ngbDropdown class="d-inline-block">
+          <button type="button" class="btn btn-outline-dark" id="dropdownBasic1" ngbDropdownToggle>Join Room</button>
+          <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+            <button type="button" ngbDropdownItem *ngFor="let room of rooms"
+              (click)="onjoinRoom(room)">{{room.name}}</button>
           </div>
         </div>
       </div>

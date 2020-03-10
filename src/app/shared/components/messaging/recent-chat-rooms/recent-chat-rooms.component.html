@@ -1,4 +1,4 @@
-<div class="card mb-sm-3 mb-md-0 contacts_card">
+<div *ngIf="rooms.length > 0" class="card mb-sm-3 mb-md-0 contacts_card">
     <div class="card-header">
       <div class="input-group">
         <input type="text" placeholder="Search..." [ngModel]='model' (ngModelChange)='changed($event)'  class="form-control search">

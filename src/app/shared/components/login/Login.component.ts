@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loginForm = this.fb.group({
+    this.loginForm = this. fb.group({
       username: ['', Validators.required],
       password: ['', Validators.required]
     });
@@ -35,7 +35,10 @@ export class LoginComponent implements OnInit {
     if (username && password) {
       this.authService.login(username, password)
         .subscribe(
-          data => this.router.navigate(['/']),
+          data => {
+            this.wsService.create(environment.webSocketUrl);
+            this.router.navigate(['/'])
+          },
           err => {
             console.log(err)
             this.invalidDetails = true;

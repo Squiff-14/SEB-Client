@@ -10,23 +10,27 @@ import { Room } from '../../models/Room';
 })
 export class RoomService {
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   create(roomName: string): Observable<any> {
     var createdBy: string = decode(localStorage.getItem('token')).nameid;
     return this.http.post("/Room", { roomName, createdBy });
   }
 
-  public getRooms(roomSearch: string) {
+  public getRooms(roomSearch: string): Observable<Room[]> {
     return this.http.get<Room[]>('/Room', { params: { roomSearch: roomSearch } });
   }
 
-  public getAllRooms(){
+  public getAllRooms(): Observable<Room[]> {
     return this.http.get<Room[]>('/Room/all');
   }
 
-  public getLatestRoom(){
+  public getLatestRoom(): Observable<Room> {
     return this.http.get<Room>('/Room/latest');
   }
 
+  public joinRoom(roomId: number): Observable<any> {
+    return this.http.put(`/Room`, { roomId: roomId });
+  }
+  
 }
