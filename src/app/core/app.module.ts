@@ -81,6 +81,8 @@ const appRoutes: Routes = [
       WebSocketService,
       AuthService,
       ScrollFixService,
+      NgxSpinnerModule,
+      BrowserAnimationsModule,
       NgxAutoScrollModule,
       MessageService,
       ImageService,
