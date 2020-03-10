@@ -1,3 +1,4 @@
+import { Router, Route } from '@angular/router';
 import { User } from './../../models/User';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
@@ -11,7 +12,7 @@ import decode from 'jwt-decode';
 export class AuthService {
 
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   private isLoggedInSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.hasToken());
 
@@ -27,6 +28,7 @@ export class AuthService {
   public logout() {
     localStorage.removeItem('token');
     this.isLoggedInSubject.next(false);
+    this.router.navigate['/login']
   }
 
   public hasToken(): boolean {
