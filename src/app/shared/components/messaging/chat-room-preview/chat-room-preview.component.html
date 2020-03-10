@@ -1,6 +1,6 @@
-<div *ngIf="message && room" class="d-flex bd-highlight p-2" >
+<div *ngIf="room" class="d-flex bd-highlight p-2" >
   <div class="user_info">
     <span>{{room.name}}</span>
-    <div>{{message.content}}</div>
+    <div *ngIf="message">{{message.content}}</div>
   </div>
 </div>

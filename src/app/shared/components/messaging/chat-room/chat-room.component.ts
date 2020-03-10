@@ -1,3 +1,4 @@
+import { Subject, observable, Observable, Subscription } from 'rxjs';
 import { Room } from './../../../../core/models/Room';
 import { ImageService } from './../../../../core/services/messaging/image.service';
 import { User } from './../../../../core/models/User';
@@ -6,7 +7,7 @@ import { ScrollFixService } from '../../../../core/services/scroll-bar/scroll-fi
 import { MessageService } from '../../../../core/services/messaging/message.service';
 import { AuthService } from '../../../../core/services/authentication/auth.service';
 import { WebSocketService } from '../../../../core/services/web-sockets/web-socket.service';
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Input, SimpleChange } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Guid } from "guid-typescript";
@@ -26,6 +27,7 @@ export class ChatRoomComponent implements OnInit {
     connectionLost: boolean = false;
     private user: User;
     private selectedFile = null;
+    private roomSubscription : Subscription;
 
     @Input() room: Room;
 
@@ -43,9 +45,11 @@ export class ChatRoomComponent implements OnInit {
     }
 
     ngOnChanges(changes) {
-        console.log(changes)
-        this.messages = [];
-        this.ngOnInit();
+        if (!changes["room"].isFirstChange()) {
+            this.roomSubscription.unsubscribe();
+            this.messages = []
+            this.ngOnInit();
+        }
     }
 
     ngAfterViewInit(): void {
@@ -53,38 +57,20 @@ export class ChatRoomComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        console.log(this.room);
 
         this.messageForm = this.fb.group({
             messageBox: ['']
         })
 
-        var messageId = Guid.create().toString();
         // Get the message history of the room.
         this.messageService.getMessageHistory(this.room.roomId, new Date().toISOString(), 15).subscribe({
-            next: async (res) => {
-
-                // Push the message history into the message list
-                this.messages.push(...res.history)
-                if (this.messages.length == 0) {
-                    // Push a message onto the list from the current user (Message has not been sent yet)
-                    this.messages.push({
-                        type: MessageType.message,
-                        message: messageId,
-                        user: this.authService.currentUser(),
-                        sentAt: null,
-                        content: "Joined the room."
-                    })
-                }
-            },
+            next: async (res) => this.messages.push(...res.history),
             error: (err) => console.log(err)
         });
 
-        // Subscribe to the rooms stream of messages. 
-        this.messageService.getObservableRoom(this.room.roomId).messages.subscribe({
+        this.roomSubscription = this.messageService.getObservableRoom(this.room.roomId).messages.subscribe({
             next: data => {
                 this.receiveMessage(data)
-                console.log(data);
             },
             error: err => {
                 console.error(err);
