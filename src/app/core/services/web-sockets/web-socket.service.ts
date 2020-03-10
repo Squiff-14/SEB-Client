@@ -1,5 +1,4 @@
 import { RoomService } from './../rooms/room.service';
-import { AuthService } from '../authentication/auth.service';
 import { DataPacket } from 'src/app/core/models/data-packet';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
@@ -13,7 +12,7 @@ export class WebSocketService {
   private ws: WebSocket;
   private receivedDataPackets: Subject<DataPacket>;
 
-  constructor(private authService: AuthService, private roomService: RoomService) {
+  constructor(private roomService: RoomService) {
     this.receivedDataPackets = new Subject<DataPacket>();
   }
 
