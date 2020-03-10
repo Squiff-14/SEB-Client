@@ -35,10 +35,7 @@ export class LoginComponent implements OnInit {
     if (username && password) {
       this.authService.login(username, password)
         .subscribe(
-          data => {
-            this.wsService.create(environment.webSocketUrl);
-            this.router.navigate(['/'])
-          },
+          data => this.router.navigate(['/']),
           err => {
             console.log(err)
             this.invalidDetails = true;

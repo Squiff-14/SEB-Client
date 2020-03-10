@@ -17,7 +17,7 @@ export class AppComponent{
 
     //WebSocket connection is re-established upon refresh if the user is logged-in
     if (this.isLoggedIn) {
-      this.wsService.create(environment.webSocketUrl);
+      // this.wsService.create(environment.webSocketUrl);
     }
 
   }
