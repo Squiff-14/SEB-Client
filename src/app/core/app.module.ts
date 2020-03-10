@@ -33,8 +33,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-
-
+import { NgxSpinnerService } from 'ngx-spinner';
 import { ScrollFixService } from './services/scroll-bar/scroll-fix.service';
 import { MessageService } from './services/messaging/message.service';
 import { ImagePipe } from './pipes/image-pipe';
@@ -78,15 +77,14 @@ const appRoutes: Routes = [
       BrowserAnimationsModule
    ],
    providers: [
-      WebSocketService,
       AuthService,
-      ScrollFixService,
-      NgxSpinnerModule,
-      BrowserAnimationsModule,
-      NgxAutoScrollModule,
+      RoomService,
       MessageService,
       ImageService,
-      RoomService,
+      WebSocketService,
+      ScrollFixService,
+      NgxAutoScrollModule,
+      NgxSpinnerService,
       {
          provide: HTTP_INTERCEPTORS,
          useClass: RequestInterceptor,
@@ -100,8 +98,7 @@ const appRoutes: Routes = [
    ],
    bootstrap: [
       AppComponent
-   ], 
-   schemas: [CUSTOM_ELEMENTS_SCHEMA]
+   ]
 })
 
 export class AppModule { }
