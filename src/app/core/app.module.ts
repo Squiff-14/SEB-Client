@@ -1,3 +1,4 @@
+import { RoomService } from './services/rooms/room.service';
 import { RegisterComponent } from './../shared/components/register/register.component';
 
 import { RecentChatRoomsComponent } from './../shared/components/messaging/recent-chat-rooms/recent-chat-rooms.component';
@@ -83,6 +84,7 @@ const appRoutes: Routes = [
       NgxAutoScrollModule,
       MessageService,
       ImageService,
+      RoomService,
       {
          provide: HTTP_INTERCEPTORS,
          useClass: RequestInterceptor,
