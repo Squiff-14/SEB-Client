@@ -1,3 +1,4 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { WebSocketService } from './web-socket.service';
 
 
@@ -6,7 +7,12 @@ import { TestBed, async, inject } from '@angular/core/testing';
 describe('Service: WebSocketService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [WebSocketService]
+      imports: [
+        HttpClientTestingModule
+      ],
+      providers: [
+        WebSocketService
+      ]
     });
   });
 

@@ -47,3 +47,7 @@
     margin-bottom: auto;
     margin-left: 15px;
 }
+
+.room-preview{
+    cursor: pointer;
+}

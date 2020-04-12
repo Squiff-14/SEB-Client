@@ -43,7 +43,7 @@ export class MessageService {
         //Convert the dataPacket to a message type and emit on the observable stream
         if (roomObservable) {
           let message = {
-            type: (packet.eventType == 'on-join-room' || packet.eventType == 'on-message' || packet.eventType == 'on-room') ? MessageType.message : MessageType.image,
+            type: (packet.eventType == 'on-join-room' || packet.eventType == 'on-message') ? MessageType.message : MessageType.image,
             message: packet.eventData.messageId,
             sentAt: packet.eventData.timestamp,
             content: packet.eventData.content,

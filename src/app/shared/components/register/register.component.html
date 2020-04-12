@@ -7,15 +7,15 @@
 <div class="d-flex justify-content-center">
   <form class="w-25" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
-      <label for="input-email">Username</label>
-      <input type="username" class="form-control" formControlName="username" placeholder="Enter Username">
+      <label for="input-username">Username</label>
+      <input id="input-username" type="username" class="form-control" formControlName="username" placeholder="Enter Username">
     </div>
     <div class="form-group">
       <label for="input-password">Password</label>
-      <input type="password" class="form-control" formControlName="password" placeholder="Enter Password">
+      <input id="input-password" type="password" class="form-control" formControlName="password" placeholder="Enter Password">
     </div>
     <div class="d-flex justify-content-between">
-      <button type="submit" class="btn btn-primary m-1">Register</button>
+      <button id="button-register" type="submit" class="btn btn-primary m-1">Register</button>
     </div>
   </form>
 </div>

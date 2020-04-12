@@ -4,6 +4,7 @@ import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
 import { ChatRoomComponent } from './chat-room.component';
+import { NgxSpinnerComponent } from 'ngx-spinner';
 
 describe('ChatRoomComponent', () => {
   let component: ChatRoomComponent;
@@ -11,7 +12,10 @@ describe('ChatRoomComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ChatRoomComponent ]
+      declarations: [ 
+        ChatRoomComponent,
+        NgxSpinnerComponent
+       ]
     })
     .compileComponents();
   }));

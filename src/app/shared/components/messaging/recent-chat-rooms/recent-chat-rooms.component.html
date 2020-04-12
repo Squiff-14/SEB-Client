@@ -1,12 +1,12 @@
-<div *ngIf="rooms.length > 0" class="card mb-sm-3 mb-md-0 contacts_card">
+<div *ngIf="rooms.length > 0" id="recent-chat-rooms" class="card mb-sm-3 mb-md-0 contacts_card">
     <div class="card-header">
       <div class="input-group">
         <input type="text" placeholder="Search..." [ngModel]='model' (ngModelChange)='changed($event)'  class="form-control search">
       </div>
     </div>
     <div class="card-body contacts_body">
-        <div *ngFor="let room of rooms" (click)="selectRoom(room)">
-            <app-chat-room-preview [room]="room"></app-chat-room-preview> 
+        <div (click)="selectRoom(room)" *ngFor="let room of rooms">          
+              <app-chat-room-preview [room]="room"></app-chat-room-preview> 
         </div>
     </div>
   </div>

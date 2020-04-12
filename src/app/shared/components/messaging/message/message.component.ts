@@ -18,7 +18,7 @@ export class MessageComponent implements OnInit {
   @Input() imagePath: String;
   @Input() message: Message;
 
-  constructor(private authService: AuthService, private imageService: ImageService, private sanitizer: DomSanitizer ) { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit() {
     this.sentByUser = this.message.user.userId == this.authService.currentUser().userId

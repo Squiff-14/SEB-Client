@@ -98,6 +98,9 @@ const appRoutes: Routes = [
    ],
    bootstrap: [
       AppComponent
+   ], 
+   schemas: [
+      CUSTOM_ELEMENTS_SCHEMA
    ]
 })
 

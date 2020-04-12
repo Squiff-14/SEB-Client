@@ -1,3 +1,4 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 /* tslint:disable:no-unused-variable */
 
 import { TestBed, async, inject } from '@angular/core/testing';
@@ -6,7 +7,12 @@ import { RoomService } from './room.service';
 describe('Service: Room', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [RoomService]
+      imports: [
+        HttpClientTestingModule
+      ],
+      providers: [
+        RoomService
+      ]
     });
   });
 

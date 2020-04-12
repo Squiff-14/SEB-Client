@@ -63,16 +63,16 @@ export class WebSocketService {
   }
 
   public close() {
-      this.ws.close(1000, 'The user disconnected')
-    }
+    this.ws.close(1000, 'The user disconnected')
+  }
 
   public dataPackets() {
-      return this.receivedDataPackets.asObservable();
-    }
+    return this.receivedDataPackets.asObservable();
+  }
 
   public isReady(): boolean {
-      return this.ws.readyState == WebSocket.OPEN
-    }
+    return this.ws.readyState == WebSocket.OPEN
+  }
 
 }
 

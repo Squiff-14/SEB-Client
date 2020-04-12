@@ -7,15 +7,15 @@
   <div class="d-flex justify-content-center">
     <form class="w-25" [formGroup]="roomForm" (ngSubmit)="onSubmit()">
       <div class="form-group">
-        <label for="input-email">Room name</label>
-        <input class="form-control" formControlName="roomName" placeholder="E.g 'The Cool room'">
+        <label for="input-room-name">Room name</label>
+        <input id="input-room-name" class="form-control" formControlName="roomName" placeholder="E.g 'The Cool room'">
       </div>
       <div class="form-group d-flex justify-content-between">
-        <button type="submit" class="btn  btn-outline-dark">Create Room</button>
+        <button id="button-create-room" type="submit" class="btn  btn-outline-dark">Create Room</button>
         <div *ngIf="rooms.length > 0" ngbDropdown class="d-inline-block">
-          <button type="button" class="btn btn-outline-dark" id="dropdownBasic1" ngbDropdownToggle>Join Room</button>
-          <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-            <button type="button" ngbDropdownItem *ngFor="let room of rooms"
+          <button id="dropdown-join-room" type="button" class="btn btn-outline-dark"  ngbDropdownToggle>Join Room</button>
+          <div ngbDropdownMenu aria-labelledby="drop-down-join-room">
+            <button id="{{room.name}}" type="button" ngbDropdownItem *ngFor="let room of rooms"
               (click)="onjoinRoom(room)">{{room.name}}</button>
           </div>
         </div>
