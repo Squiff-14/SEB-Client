@@ -22,7 +22,9 @@ export class WebSocketService {
     this.ws.onclose = () => {
       console.log("Client Disconencted")
     };
-    this.ws.onmessage = (event: any) => this.receivedDataPackets.next(JSON.parse(event.data));
+    this.ws.onmessage = (event: any) =>{ 
+      this.receivedDataPackets.next(JSON.parse(event.data))
+    };
     this.ws.onerror = (event) => console.log(event);
   }
 

@@ -1,5 +1,5 @@
 {
-  "baseUrl": "https://seb-uk.com",
-  "apiUrl": "https://api.seb-uk.com",
+  "baseUrl": "http://localhost:4200",
+  "apiUrl": "http://localhost:5000",
   "projectId": "z3og2d"
 }
